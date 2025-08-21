@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home | ReUse Jovem</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap');
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #f3f4f6;
+        }
+        #menuList {
+            position: fixed;
+            top: 68px;
+            left: 0;
+            width: 250px;
+            height: 100vh;
+            background-color: white;
+            box-shadow: 2px 0 5px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease-in-out;
+            transform: translateX(-100%);
+            z-index: 40;
+        }
+        #menuList.active {
+            transform: translateX(0);
+        }
+        .info-card {
+            background-color: white;
+            border-radius: 1rem;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            transition: transform 0.3s ease-in-out;
+            cursor: pointer;
+        }
+        .info-card:hover {
+            transform: translateY(-5px);
+        }
+        .hero-section {
+            background: linear-gradient(to right, #6EE7B7, #3B82F6);
+        }
+        .text-shadow-custom {
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+        }
+    </style>
+</head>
+<body class="flex flex-col min-h-screen">
+    
+    <header class="bg-white shadow-md p-4 flex justify-between items-center sticky top-0 z-50">
+        <div class="flex items-center space-x-4">
+            <button id="menuToggle" class="text-gray-600 text-2xl">
+                <i class="fas fa-bars"></i>
+            </button>
+            <h1 class="text-xl font-extrabold text-gray-900">ReUse Jovem</h1>
+        </div>
+        
+        <div id="loggedOutButtons" class="flex items-center space-x-4 ml-auto">
+            <a href="login.html" class="bg-gray-800 text-white font-bold py-2 px-4 rounded-full shadow-lg hover:bg-gray-700 transition-colors">
+                Entrar
+            </a>
+            <a href="cadastro.html" class="bg-green-500 text-white font-bold py-2 px-4 rounded-full shadow-lg hover:bg-green-600 transition-colors">
+                Criar Conta
+            </a>
+        </div>
+        
+        <div id="loggedInButtons" class="hidden items-center space-x-4 ml-auto">
+            <a href="perfil.html" class="text-gray-600 hover:text-gray-900 transition-colors" aria-label="Perfil">
+                <i class="fas fa-user-circle text-4xl"></i>
+            </a>
+            <button id="logoutButton" class="bg-gray-800 text-white font-bold py-2 px-4 rounded-full shadow-lg hover:bg-gray-700 transition-colors">
+                Sair
+            </button>
+        </div>
+    </header>
+    
+    <nav id="menuList">
+        <ul class="flex flex-col space-y-2 p-4">
+            <li><a href="index.html" class="text-gray-600 hover:text-green-500 font-semibold transition-colors w-full text-left">Home</a></li>
+            <li><a href="loja.html" class="text-gray-600 hover:text-green-500 font-semibold transition-colors w-full text-left">Loja</a></li>
+            <li><a href="cadastro.html" class="text-gray-600 hover:text-green-500 font-semibold transition-colors w-full text-left">Cadastro</a></li>
+            <li><a href="login.html" class="text-gray-600 hover:text-green-500 font-semibold transition-colors w-full text-left">Login</a></li>
+        </ul>
+    </nav>
+    
+    <main class="flex-grow">
+        <section class="hero-section text-white text-center py-20 px-8">
+            <div class="max-w-4xl mx-auto">
+                <h2 class="text-5xl md:text-6xl font-extrabold mb-4 text-shadow-custom">
+                    Troque, ReUse, Renove.
+                </h2>
+                <p class="text-lg md:text-xl font-light mb-8 max-w-2xl mx-auto">
+                    Dê uma nova vida às suas roupas e encontre tesouros únicos com a nossa comunidade.
+                    O futuro da moda é circular, e começa aqui com você.
+                </p>
+                <a href="loja.html" class="inline-block bg-white text-green-600 font-bold py-3 px-8 rounded-full text-lg shadow-lg hover:bg-gray-200 transition-transform transform hover:scale-105">
+                    Explore as Trocas
+                </a>
+            </div>
+        </section>
+
+        <section class="py-16 px-8 bg-gray-100">
+            <div class="max-w-6xl mx-auto">
+                <h3 class="text-3xl font-bold text-center text-gray-800 mb-12">Como Funciona</h3>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                    <div class="info-card text-center p-6">
+                        <i class="fas fa-exchange-alt text-5xl text-green-500 mb-4"></i>
+                        <h4 class="text-xl font-bold text-gray-800 mb-2">Conecte-se e Troque</h4>
+                        <p class="text-gray-600">Encontre pessoas com gostos semelhantes e troque peças que você não usa mais por algo novo para você.</p>
+                    </div>
+                    <div class="info-card text-center p-6">
+                        <i class="fas fa-leaf text-5xl text-green-500 mb-4"></i>
+                        <h4 class="text-xl font-bold text-gray-800 mb-2">Moda Sustentável</h4>
+                        <p class="text-gray-600">Participe de um movimento que reduz o desperdício e prolonga o ciclo de vida da moda.</p>
+                    </div>
+                    <div class="info-card text-center p-6">
+                        <i class="fas fa-dollar-sign text-5xl text-green-500 mb-4"></i>
+                        <h4 class="text-xl font-bold text-gray-800 mb-2">Economize e Venda</h4>
+                        <p class="text-gray-600">Além de trocas, você também pode vender suas peças premium e ganhar dinheiro.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="w-full mt-auto p-4 bg-white rounded-t-lg shadow-md">
+        <p class="text-gray-500 font-semibold text-center">
+            Juntos, podemos fazer a nossa parte.
+        </p>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const menuToggle = document.getElementById('menuToggle');
+            const menuList = document.getElementById('menuList');
+            const loggedInButtons = document.getElementById('loggedInButtons');
+            const loggedOutButtons = document.getElementById('loggedOutButtons');
+            const logoutButton = document.getElementById('logoutButton');
+
+            menuToggle.addEventListener('click', () => {
+                menuList.classList.toggle('active');
+            });
+
+            // Função para verificar o status de login
+            const checkLoginStatus = async () => {
+                try {
+                    const response = await fetch('/status');
+                    const data = await response.json();
+                    if (data.loggedIn) {
+                        loggedInButtons.classList.remove('hidden');
+                        loggedInButtons.classList.add('flex');
+                        loggedOutButtons.classList.add('hidden');
+                    } else {
+                        loggedOutButtons.classList.remove('hidden');
+                        loggedOutButtons.classList.add('flex');
+                        loggedInButtons.classList.add('hidden');
+                    }
+                } catch (error) {
+                    console.error('Erro ao verificar status de login:', error);
+                }
+            };
+            
+            // Adiciona um listener para o botão de sair
+            logoutButton.addEventListener('click', async () => {
+                try {
+                    await fetch('/logout', { method: 'POST' });
+                    window.location.href = '/'; // Redireciona para a página inicial
+                } catch (error) {
+                    console.error('Erro ao fazer logout:', error);
+                }
+            });
+
+            checkLoginStatus();
+        });
+    </script>
+</body>
+</html>

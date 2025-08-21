@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Loja | ReUse Jovem</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap');
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #f3f4f6;
+        }
+        #menuList {
+            position: fixed;
+            top: 68px;
+            left: 0;
+            width: 250px;
+            height: 100vh;
+            background-color: white;
+            box-shadow: 2px 0 5px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease-in-out;
+            transform: translateX(-100%);
+            z-index: 40;
+        }
+        #menuList.active {
+            transform: translateX(0);
+        }
+        .peca-card {
+            background-color: white;
+            border-radius: 1rem;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+            cursor: pointer;
+        }
+        .peca-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+        }
+        .premium-badge {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+        }
+    </style>
+</head>
+<body class="flex flex-col min-h-screen">
+    
+    <header class="bg-white shadow-md p-4 flex justify-between items-center sticky top-0 z-50 w-full">
+        <div class="flex items-center space-x-4">
+            <button id="menuToggle" class="text-gray-600 text-2xl">
+                <i class="fas fa-bars"></i>
+            </button>
+            <h1 class="text-xl font-extrabold text-gray-900">ReUse Jovem</h1>
+        </div>
+        
+        <div id="loggedOutButtons" class="flex items-center space-x-4 ml-auto">
+            <a href="login.html" class="bg-gray-800 text-white font-bold py-2 px-4 rounded-full shadow-lg hover:bg-gray-700 transition-colors">
+                Entrar
+            </a>
+            <a href="cadastro.html" class="bg-green-500 text-white font-bold py-2 px-4 rounded-full shadow-lg hover:bg-green-600 transition-colors">
+                Criar Conta
+            </a>
+        </div>
+        
+        <div id="loggedInButtons" class="hidden items-center space-x-4 ml-auto">
+            <a href="perfil.html" class="text-gray-600 hover:text-gray-900 transition-colors" aria-label="Perfil">
+                <i class="fas fa-user-circle text-4xl"></i>
+            </a>
+            <button id="logoutButton" class="bg-gray-800 text-white font-bold py-2 px-4 rounded-full shadow-lg hover:bg-gray-700 transition-colors">
+                Sair
+            </button>
+        </div>
+    </header>
+
+    <nav id="menuList">
+        <ul class="flex flex-col space-y-2 p-4">
+            <li><a href="index.html" class="text-gray-600 hover:text-green-500 font-semibold transition-colors w-full text-left">Home</a></li>
+            <li><a href="loja.html" class="text-gray-600 hover:text-green-500 font-semibold transition-colors w-full text-left">Loja</a></li>
+            <li><a href="cadastro.html" class="text-gray-600 hover:text-green-500 font-semibold transition-colors w-full text-left">Cadastro</a></li>
+            <li><a href="login.html" class="text-gray-600 hover:text-green-500 font-semibold transition-colors w-full text-left">Login</a></li>
+        </ul>
+    </nav>
+    
+    <main class="flex-grow p-8">
+        <h2 class="text-4xl font-bold text-center text-gray-800 mb-6">Peças de Roupa Disponíveis</h2>
+        
+        <div class="sticky top-16 bg-white py-4 z-40">
+            <div class="flex justify-center space-x-4">
+                <button class="filter-button bg-gray-200 text-gray-700 font-semibold py-2 px-6 rounded-full hover:bg-gray-300 transition-colors" data-categoria="Todos">Todos</button>
+                <button class="filter-button bg-gray-200 text-gray-700 font-semibold py-2 px-6 rounded-full hover:bg-gray-300 transition-colors" data-categoria="Feminino">Feminino</button>
+                <button class="filter-button bg-gray-200 text-gray-700 font-semibold py-2 px-6 rounded-full hover:bg-gray-300 transition-colors" data-categoria="Masculino">Masculino</button>
+                <button class="filter-button bg-gray-200 text-gray-700 font-semibold py-2 px-6 rounded-full hover:bg-gray-300 transition-colors" data-categoria="Infantil">Infantil</button>
+            </div>
+        </div>
+
+        <div id="pecasContainer" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8 max-w-7xl mx-auto mt-8">
+            </div>
+        <p id="loadingMessage" class="text-center text-gray-500 mt-10">Carregando peças...</p>
+    </main>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const menuToggle = document.getElementById('menuToggle');
+            const menuList = document.getElementById('menuList');
+            const loggedInButtons = document.getElementById('loggedInButtons');
+            const loggedOutButtons = document.getElementById('loggedOutButtons');
+            const logoutButton = document.getElementById('logoutButton');
+            const pecasContainer = document.getElementById('pecasContainer');
+            const loadingMessage = document.getElementById('loadingMessage');
+            const filterButtons = document.querySelectorAll('.filter-button');
+            let allPecas = [];
+
+            menuToggle.addEventListener('click', () => {
+                menuList.classList.toggle('active');
+            });
+
+            const checkLoginStatus = async () => {
+                try {
+                    const response = await fetch('/status');
+                    const data = await response.json();
+                    if (data.loggedIn) {
+                        loggedInButtons.classList.remove('hidden');
+                        loggedInButtons.classList.add('flex');
+                        loggedOutButtons.classList.add('hidden');
+                    } else {
+                        loggedOutButtons.classList.remove('hidden');
+                        loggedOutButtons.classList.add('flex');
+                        loggedInButtons.classList.add('hidden');
+                    }
+                } catch (error) {
+                    console.error('Erro ao verificar status de login:', error);
+                }
+            };
+            
+            logoutButton.addEventListener('click', async () => {
+                try {
+                    await fetch('/logout', { method: 'POST' });
+                    window.location.href = '/';
+                } catch (error) {
+                    console.error('Erro ao fazer logout:', error);
+                }
+            });
+
+            const renderPecas = (pecasToRender) => {
+                pecasContainer.innerHTML = '';
+                if (pecasToRender.length === 0) {
+                    pecasContainer.innerHTML = '<p class="text-center text-gray-500">Nenhuma peça encontrada.</p>';
+                    return;
+                }
+                pecasToRender.forEach(peca => {
+                    const card = document.createElement('div');
+                    card.className = 'peca-card relative p-4';
+                    
+                    const precoDisplay = peca.preco !== null ? `R$ ${peca.preco.toFixed(2).replace('.', ',')}` : 'Troca';
+                    
+                    card.innerHTML = `
+                        <img src="${peca.imagem}" alt="${peca.titulo}" class="w-full h-48 object-cover rounded-lg mb-4">
+                        <h3 class="text-xl font-bold text-gray-900 mb-2">${peca.titulo}</h3>
+                        <p class="text-gray-600 mb-4">${peca.descricao}</p>
+                        <div class="flex justify-between items-center">
+                            <span class="text-2xl font-bold text-green-600">${precoDisplay}</span>
+                            <button class="bg-green-500 text-white font-bold py-2 px-4 rounded-full shadow-lg hover:bg-green-600 transition-colors action-button" data-peca-id="${peca.id}" data-action="${peca.preco !== null ? 'comprar' : 'trocar'}">
+                                ${peca.preco !== null ? 'Comprar' : 'Trocar'}
+                            </button>
+                        </div>
+                        ${peca.isPremium ? '<div class="premium-badge bg-yellow-400 text-yellow-900 text-sm font-bold px-3 py-1 rounded-full shadow-md">Premium</div>' : ''}
+                    `;
+                    pecasContainer.appendChild(card);
+                });
+
+                document.querySelectorAll('.action-button').forEach(button => {
+                    button.addEventListener('click', async (event) => {
+                        const response = await fetch('/status');
+                        const data = await response.json();
+                        
+                        if (!data.loggedIn) {
+                            alert('Você precisa estar logado para realizar esta ação.');
+                            window.location.href = '/login.html';
+                        } else {
+                            const pecaId = event.target.getAttribute('data-peca-id');
+                            const action = event.target.getAttribute('data-action');
+                            
+                            // Lógica para enviar a solicitação para o backend
+                            try {
+                                const actionResponse = await fetch(`/${action}/${pecaId}`, {
+                                    method: 'POST'
+                                });
+                                const message = await actionResponse.text();
+                                alert(message);
+                            } catch (error) {
+                                console.error(`Erro ao realizar a ação de ${action}:`, error);
+                                alert(`Erro ao tentar ${action} a peça. Tente novamente mais tarde.`);
+                            }
+                        }
+                    });
+                });
+            };
+
+            const loadAllPecas = async () => {
+                try {
+                    const response = await fetch('/pecas');
+                    allPecas = await response.json();
+                    loadingMessage.classList.add('hidden');
+                    renderPecas(allPecas);
+                } catch (error) {
+                    console.error('Erro ao carregar as peças:', error);
+                    loadingMessage.textContent = 'Erro ao carregar as peças. Tente novamente mais tarde.';
+                    loadingMessage.classList.remove('hidden');
+                }
+            };
+
+            filterButtons.forEach(button => {
+                button.addEventListener('click', () => {
+                    const categoria = button.getAttribute('data-categoria');
+                    let pecasFiltradas = [];
+
+                    if (categoria === 'Todos') {
+                        pecasFiltradas = allPecas;
+                    } else {
+                        pecasFiltradas = allPecas.filter(peca => peca.categoria === categoria);
+                    }
+                    renderPecas(pecasFiltradas);
+                });
+            });
+
+            checkLoginStatus();
+            loadAllPecas();
+        });
+    </script>
+</body>
+</html>

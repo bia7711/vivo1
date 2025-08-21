@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login | ReUse Jovem</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap');
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #f3f4f6;
+            background-image: linear-gradient(to bottom right, #f0fdf4, #d1fae5);
+        }
+        .login-container {
+            background-color: white;
+            border-radius: 1rem;
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+        }
+        #menuList {
+            position: fixed;
+            top: 68px;
+            left: 0;
+            width: 250px;
+            height: 100vh;
+            background-color: white;
+            box-shadow: 2px 0 5px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease-in-out;
+            transform: translateX(-100%);
+            z-index: 40;
+        }
+        #menuList.active {
+            transform: translateX(0);
+        }
+    </style>
+</head>
+<body class="flex flex-col min-h-screen">
+    
+    <header class="bg-white shadow-md p-4 flex justify-between items-center sticky top-0 z-50 w-full">
+        <div class="flex items-center space-x-4">
+            <button id="menuToggle" class="text-gray-600 text-2xl">
+                <i class="fas fa-bars"></i>
+            </button>
+            <h1 class="text-xl font-extrabold text-gray-900">ReUse Jovem</h1>
+        </div>
+        
+        <div id="loggedOutButtons" class="flex items-center space-x-4 ml-auto">
+            <a href="login.html" class="bg-gray-800 text-white font-bold py-2 px-4 rounded-full shadow-lg hover:bg-gray-700 transition-colors">
+                Entrar
+            </a>
+            <a href="cadastro.html" class="bg-green-500 text-white font-bold py-2 px-4 rounded-full shadow-lg hover:bg-green-600 transition-colors">
+                Criar Conta
+            </a>
+        </div>
+        
+        <div id="loggedInButtons" class="hidden items-center space-x-4 ml-auto">
+            <a href="perfil.html" class="text-gray-600 hover:text-gray-900 transition-colors" aria-label="Perfil">
+                <i class="fas fa-user-circle text-4xl"></i>
+            </a>
+            <button id="logoutButton" class="bg-gray-800 text-white font-bold py-2 px-4 rounded-full shadow-lg hover:bg-gray-700 transition-colors">
+                Sair
+            </button>
+        </div>
+    </header>
+
+    <nav id="menuList">
+        <ul class="flex flex-col space-y-2 p-4">
+            <li><a href="index.html" class="text-gray-600 hover:text-green-500 font-semibold transition-colors w-full text-left">Home</a></li>
+            <li><a href="loja.html" class="text-gray-600 hover:text-green-500 font-semibold transition-colors w-full text-left">Loja</a></li>
+            <li><a href="cadastro.html" class="text-gray-600 hover:text-green-500 font-semibold transition-colors w-full text-left">Cadastro</a></li>
+            <li><a href="login.html" class="text-gray-600 hover:text-green-500 font-semibold transition-colors w-full text-left">Login</a></li>
+        </ul>
+    </nav>
+
+    <main class="flex-grow flex items-center justify-center p-8">
+        <div class="login-container p-10 w-full max-w-md">
+            <h2 class="text-3xl font-bold text-center text-gray-800 mb-8">Entrar na sua conta</h2>
+            <form action="/login" method="POST" class="space-y-6">
+                <div>
+                    <label for="email" class="block text-gray-700 font-semibold mb-2">E-mail</label>
+                    <input type="email" id="email" name="email" class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 transition-colors" required>
+                </div>
+                <div>
+                    <label for="senha" class="block text-gray-700 font-semibold mb-2">Senha</label>
+                    <input type="password" id="senha" name="senha" class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 transition-colors" required>
+                </div>
+                <button type="submit" class="w-full bg-green-500 text-white font-bold py-3 px-4 rounded-lg shadow-lg hover:bg-green-600 transition-colors transform hover:scale-105">
+                    Entrar
+                </button>
+            </form>
+            <p class="text-center text-gray-600 mt-6">
+                Não tem uma conta? <a href="cadastro.html" class="text-blue-500 hover:underline font-semibold transition-colors">Crie uma aqui</a>.
+            </p>
+        </div>
+    </main>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const menuToggle = document.getElementById('menuToggle');
+            const menuList = document.getElementById('menuList');
+            const loggedInButtons = document.getElementById('loggedInButtons');
+            const loggedOutButtons = document.getElementById('loggedOutButtons');
+            const logoutButton = document.getElementById('logoutButton');
+            
+            menuToggle.addEventListener('click', () => {
+                menuList.classList.toggle('active');
+            });
+
+            const checkLoginStatus = async () => {
+                try {
+                    const response = await fetch('/status');
+                    const data = await response.json();
+                    if (data.loggedIn) {
+                        loggedInButtons.classList.remove('hidden');
+                        loggedInButtons.classList.add('flex');
+                        loggedOutButtons.classList.add('hidden');
+                    } else {
+                        loggedOutButtons.classList.remove('hidden');
+                        loggedOutButtons.classList.add('flex');
+                        loggedInButtons.classList.add('hidden');
+                    }
+                } catch (error) {
+                    console.error('Erro ao verificar status de login:', error);
+                }
+            };
+            
+            logoutButton.addEventListener('click', async () => {
+                try {
+                    await fetch('/logout', { method: 'POST' });
+                    window.location.href = '/';
+                } catch (error) {
+                    console.error('Erro ao fazer logout:', error);
+                }
+            });
+
+            checkLoginStatus();
+        });
+    </script>
+</body>
+</html>
