@@ -6,34 +6,36 @@
     <title>Adicionar Item | ReUse Jovem</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+    <link rel="stylesheet" href="styles.css">
+    <script src="theme.js" defer></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap');
         body {
             font-family: 'Poppins', sans-serif;
-            background-color: #f3f4f6;
+            background-color: var(--bg-primary);
         }
     </style>
 </head>
 <body class="p-8">
 
-    <header class="bg-white shadow-md rounded-lg p-4 mb-8 flex items-center justify-between max-w-4xl mx-auto">
-        <a href="perfil.html" class="flex items-center text-gray-600 hover:text-gray-900 font-bold transition-colors">
+    <header class="shadow-md rounded-lg p-4 mb-8 flex items-center justify-between max-w-4xl mx-auto bg-primary">
+        <a href="perfil.html" class="flex items-center text-secondary hover:text-primary font-bold transition-colors">
             <i class="fas fa-arrow-left mr-2"></i> Adicionar Novo Item
         </a>
     </header>
 
-    <main class="max-w-xl mx-auto space-y-8 bg-white p-8 rounded-lg shadow-lg">
-        <h2 class="text-2xl font-bold text-gray-800 text-center mb-6">Informações do Item</h2>
+    <main class="max-w-xl mx-auto space-y-8 p-8 rounded-lg shadow-lg border border-theme bg-card-bg">
+        <h2 class="text-2xl font-bold text-primary text-center mb-6">Informações do Item</h2>
         
         <form id="uploadForm" class="space-y-6">
             <div>
-                <label for="itemNome" class="block text-sm font-medium text-gray-700">Nome do Item</label>
-                <input type="text" id="itemNome" name="itemNome" required class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:ring-green-500 focus:border-green-500">
+                <label for="itemNome" class="block text-sm font-medium text-primary">Nome do Item</label>
+                <input type="text" id="itemNome" name="itemNome" required class="mt-1 block w-full px-4 py-2 border border-theme rounded-lg shadow-sm focus:ring-green-500 focus:border-green-500 bg-card-bg text-primary">
             </div>
 
             <div>
-                <label for="itemCategoria" class="block text-sm font-medium text-gray-700">Categoria</label>
-                <select id="itemCategoria" name="itemCategoria" required class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:ring-green-500 focus:border-green-500">
+                <label for="itemCategoria" class="block text-sm font-medium text-primary">Categoria</label>
+                <select id="itemCategoria" name="itemCategoria" required class="mt-1 block w-full px-4 py-2 border border-theme rounded-lg shadow-sm focus:ring-green-500 focus:border-green-500 bg-card-bg text-primary">
                     <option value="">Selecione uma categoria</option>
                     <option value="roupas">Roupas</option>
                     <option value="calcados">Calçados</option>
@@ -45,13 +47,13 @@
             </div>
 
             <div>
-                <label for="itemDescricao" class="block text-sm font-medium text-gray-700">Descrição</label>
-                <textarea id="itemDescricao" name="itemDescricao" rows="4" required class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:ring-green-500 focus:border-green-500"></textarea>
+                <label for="itemDescricao" class="block text-sm font-medium text-primary">Descrição</label>
+                <textarea id="itemDescricao" name="itemDescricao" rows="4" required class="mt-1 block w-full px-4 py-2 border border-theme rounded-lg shadow-sm focus:ring-green-500 focus:border-green-500 bg-card-bg text-primary"></textarea>
             </div>
 
             <div>
-                <label for="itemImagem" class="block text-sm font-medium text-gray-700">Imagem do Item</label>
-                <input type="file" id="itemImagem" name="itemImagem" accept="image/*" required class="mt-1 block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-green-50 file:text-green-700 hover:file:bg-green-100">
+                <label for="itemImagem" class="block text-sm font-medium text-primary">Imagem do Item</label>
+                <input type="file" id="itemImagem" name="itemImagem" accept="image/*" required class="mt-1 block w-full text-sm text-secondary file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-green-50 file:text-green-700 hover:file:bg-green-100">
             </div>
 
             <button type="submit" class="w-full bg-green-500 text-white font-bold py-3 px-4 rounded-lg shadow-md hover:bg-green-600 transition-colors">

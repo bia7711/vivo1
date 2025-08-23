@@ -17,7 +17,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const userItems = [
         { id: 101, name: "Camiseta Azul", image: "https://placehold.co/400x400/3B82F6/FFF?text=Camiseta+Azul", size: "M" },
         { id: 102, name: "Moletom Cinza", image: "https://placehold.co/400x400/6B7280/FFF?text=Moletom+Cinza", size: "G" },
-        { id: 103, name: "Saia Verde", image: "https://placehold.co/400x400/10B981/FFF?text=Saia+Verde", size: "P" }
+        { id: 103, name: "Saia Verde", image: "https://placehold.co/400x400/22c55e/FFF?text=Saia+Verde", size: "P" }
     ];
 
     const reviewsData = {

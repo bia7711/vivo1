@@ -1,0 +1,336 @@
+/* Sistema de Tema Global - ReUse Jovem */
+:root {
+  /* Cores Light Mode (default) */
+  --bg-primary: #f8fafc;
+  --bg-secondary: #ffffff;
+  --text-primary: #1f2937;
+  --text-secondary: #6b7280;
+  --header-bg: #ffffff;
+  --card-bg: #ffffff;
+  --footer-bg: #ffffff;
+  --input-bg: #ffffff;
+  --border-color: #e5e7eb;
+  --accent-color: #22c55e;
+  --accent-hover: #059669;
+  --success-color: #059669;
+  --warning-color: #d97706;
+  --error-color: #dc2626;
+  --button-text: #ffffff;
+  --button-bg: #22c55e;
+  --button-hover: #059669;
+  --gradient-start: #f0fdf4;
+  --gradient-end: #d1fae5;
+  --hero-gradient-start: #6EE7B7;
+  --hero-gradient-end: #3B82F6;
+}
+
+[data-theme="dark"] {
+  /* Cores Dark Mode */
+  --bg-primary: #121212;
+  --bg-secondary: #1a1a1a;
+  --text-primary: #e0e0e0;
+  --text-secondary: #b0b0b0;
+  --header-bg: #1a1a1a;
+  --card-bg: #2d2d2d;
+  --footer-bg: #1a1a1a;
+  --input-bg: #2d2d2d;
+  --border-color: #404040;
+  --accent-color: #22c55e;
+  --accent-hover: #34d399;
+  --success-color: #34d399;
+  --warning-color: #fbbf24;
+  --error-color: #f87171;
+  --button-text: #ffffff;
+  --button-bg: #22c55e;
+  --button-hover: #34d399;
+  --gradient-start: #1a1a1a;
+  --gradient-end: #2d2d2d;
+  --hero-gradient-start: #059669;
+  --hero-gradient-end: #1d4ed8;
+}
+
+/* Transições suaves para todas as propriedades relacionadas ao tema */
+* {
+  transition: background-color 0.3s ease, 
+              color 0.3s ease, 
+              border-color 0.3s ease,
+              box-shadow 0.3s ease,
+              fill 0.3s ease;
+}
+
+/* Toggle Switch Minimalista */
+.theme-toggle {
+  position: relative;
+  width: 60px;
+  height: 30px;
+  background: var(--bg-secondary);
+  border: 2px solid var(--border-color);
+  border-radius: 30px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  padding: 2px;
+}
+
+.theme-toggle:hover {
+  border-color: var(--accent-color);
+}
+
+.theme-toggle::before {
+  content: '';
+  position: absolute;
+  width: 24px;
+  height: 24px;
+  background: var(--text-primary);
+  border-radius: 50%;
+  transition: all 0.3s ease;
+  left: 2px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Font Awesome 6 Free';
+  font-weight: 900;
+  font-size: 12px;
+  color: var(--bg-primary);
+}
+
+[data-theme="dark"] .theme-toggle::before {
+  content: '\f186'; /* Ícone da lua */
+  left: calc(100% - 26px);
+  background: var(--accent-color);
+  color: var(--bg-primary);
+}
+
+[data-theme="light"] .theme-toggle::before {
+  content: '\f185'; /* Ícone do sol */
+  left: 2px;
+  background: var(--accent-color);
+  color: var(--bg-primary);
+}
+
+/* Dark mode adjustments */
+[data-theme="dark"] .hero-gradient {
+    background-image: url('../image/banner2.png');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    position: relative; /* Position relative for overlay */
+    isolation: isolate; /* Create new stacking context */
+}
+
+[data-theme="dark"] .hero-gradient::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.4); /* Lighter semi-transparent overlay */
+    z-index: -1; /* Place overlay behind the content */
+}
+
+/* Ensure hero content stays above the overlay */
+[data-theme="dark"] .hero-gradient > * {
+    position: relative;
+    z-index: 1;
+}
+
+/* Button styles for hero section in both modes */
+.hero-gradient .bg-white {
+    background-color: #ffffff !important; /* Keep white background */
+    color: var(--accent-color) !important; /* Use theme color for text */
+    border: 2px solid var(--accent-color);
+}
+
+.hero-gradient .bg-white:hover {
+    background-color: var(--accent-color) !important;
+    color: #ffffff !important;
+    transform: scale(1.05);
+}
+
+[data-theme="dark"] .btn-primary {
+    background-color: var(--button-bg); /* Restore original button color in dark mode */
+}
+
+[data-theme="dark"] .text-primary {
+    color: var(--text-primary); /* Keep text color normal in dark mode */
+}
+body {
+  font-family: 'Poppins', sans-serif;
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+  margin: 0;
+  padding: 0;
+  min-height: 100vh;
+}
+
+/* Header styles */
+header {
+  background-color: var(--header-bg);
+  border-bottom: 1px solid var(--border-color);
+}
+
+/* Card styles */
+.card {
+  background-color: var(--card-bg);
+  border: 1px solid var(--border-color);
+  border-radius: 0.75rem;
+}
+
+/* Input styles */
+input, select, textarea {
+  background-color: var(--input-bg);
+  color: var(--text-primary);
+  border: 1px solid var(--border-color);
+  border-radius: 0.5rem;
+  padding: 0.75rem;
+  transition: all 0.3s ease;
+}
+
+input:focus, select:focus, textarea:focus {
+  border-color: var(--accent-color);
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.1);
+}
+
+/* Button styles */
+.btn-primary {
+  background-color: var(--button-bg);
+  color: var(--button-text);
+  border: none;
+  border-radius: 0.5rem;
+  padding: 0.75rem 1.5rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.btn-primary:hover {
+  background-color: var(--button-hover);
+  transform: translateY(-1px);
+}
+
+/* Menu styles */
+#menuList {
+  background-color: var(--header-bg);
+  border-right: 1px solid var(--border-color);
+}
+
+/* Footer styles */
+footer {
+  background-color: var(--footer-bg);
+  border-top: 1px solid var(--border-color);
+}
+
+/* Utility classes */
+.text-primary {
+  color: var(--text-primary) !important;
+}
+
+.text-secondary {
+  color: var(--text-secondary) !important;
+}
+
+.bg-primary {
+  background-color: var(--bg-primary) !important;
+}
+
+.bg-secondary {
+  background-color: var(--bg-secondary) !important;
+}
+
+.border-theme {
+  border-color: var(--border-color) !important;
+}
+
+/* Form container styles */
+.form-container {
+  background-color: var(--card-bg);
+  border: 1px solid var(--border-color);
+  border-radius: 1rem;
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+}
+
+/* Hero section background image */
+.hero-gradient {
+  background-image: url('../image/banner2.png');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+/* Login/Cadastro background gradient */
+.auth-gradient {
+  background: linear-gradient(to bottom right, var(--gradient-start), var(--gradient-end));
+}
+
+/* Filter buttons */
+.filter-button {
+  background-color: var(--bg-secondary);
+  color: var(--text-primary);
+  border: 1px solid var(--border-color);
+  border-radius: 9999px;
+  padding: 0.5rem 1.5rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.filter-button:hover {
+  background-color: var(--accent-color);
+  color: white;
+  border-color: var(--accent-color);
+}
+
+/* Product/Item cards */
+.product-card, .item-card {
+  background-color: var(--card-bg);
+  border: 1px solid var(--border-color);
+  border-radius: 1rem;
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  transition: all 0.3s ease;
+}
+
+.product-card:hover, .item-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+}
+
+/* Premium badge */
+.premium-badge {
+  background-color: var(--warning-color);
+  color: #000;
+  border-radius: 9999px;
+  padding: 0.25rem 0.75rem;
+  font-size: 0.75rem;
+  font-weight: 700;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+}
+
+/* Text shadow for hero text */
+.text-shadow-custom {
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+/* Ensure good contrast for all text elements */
+h1, h2, h3, h4, h5, h6 {
+  color: var(--text-primary);
+}
+
+p, span, div {
+  color: var(--text-primary);
+}
+
+/* Specific styles for form labels */
+label {
+  color: var(--text-primary);
+  font-weight: 600;
+}
+
+/* File input styling */
+input[type="file"] {
+  background-color: var(--input-bg);
+  color: var(--text-primary);
+  border: 1px solid var(--border-color);
+}
