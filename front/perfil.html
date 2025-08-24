@@ -42,6 +42,7 @@
             box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
             transition: transform 0.3s ease-in-out;
             border: 1px solid var(--border-color);
+            width: 200px; /* Ajuste de largura para os cards */
         }
         .item-card:hover {
             transform: translateY(-5px);
@@ -78,8 +79,7 @@
         <ul class="flex flex-col space-y-2 p-4">
             <li><a href="index.html" class="text-secondary hover:text-accent-color font-semibold transition-colors w-full text-left">Home</a></li>
             <li><a href="loja.html" class="text-secondary hover:text-accent-color font-semibold transition-colors w-full text-left">Loja</a></li>
-            <li><a href="cadastro.html" class="text-secondary hover:text-accent-color font-semibold transition-colors w-full text-left">Cadastro</a></li>
-            <li><a href="login.html" class="text-secondary hover:text-accent-color font-semibold transition-colors w-full text-left">Login</a></li>
+            <li><a href="index.html#sobre" class="text-secondary hover:text-accent-color font-semibold transition-colors w-full text-left">Sobre Nós</a></li>           
         </ul>
     </nav>
     
@@ -96,16 +96,64 @@
                     </div>
                     <h2 id="userName" class="text-3xl font-bold text-primary">Nome do Usuário</h2>
                     <p id="userEmail" class="text-secondary">emaildousuario@exemplo.com</p>
-                    <button id="addPieceButton" class="bg-green-500 text-white font-bold py-2 px-6 rounded-full shadow-lg mt-4 hover:bg-green-600 transition-colors">
-                        Adicionar Nova Peça
-                    </button>
+            <button id="addPieceButton" class="bg-green-500 text-white font-bold py-2 px-6 rounded-full shadow-lg mt-4 hover:bg-green-600 transition-colors">
+                Adicionar Nova Peça
+            </button>
+            <div id="addPieceModal" class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 hidden" style="z-index: 50;">
+                <div class="bg-white p-6 rounded-lg shadow-lg w-96" style="z-index: 60;">
+                    <h2 class="text-xl font-bold mb-4">Adicionar Nova Peça</h2>
+                    <form id="addPieceForm">
+                        <div class="mb-4">
+                            <label for="titulo" class="block text-sm font-medium text-gray-700">Título</label>
+                            <input type="text" id="titulo" name="titulo" required class="mt-1 block w-full border border-gray-300 rounded-md p-2" />
+                        </div>
+                        <div class="mb-4">
+                            <label for="descricao" class="block text-sm font-medium text-gray-700">Descrição</label>
+                            <textarea id="descricao" name="descricao" required class="mt-1 block w-full border border-gray-300 rounded-md p-2"></textarea>
+                        </div>
+                        <div class="mb-4">
+                            <label for="categoria" class="block text-sm font-medium text-gray-700">Categoria</label>
+                            <select id="categoria" name="categoria" required class="mt-1 block w-full border border-gray-300 rounded-md p-2">
+                                <option value="">Selecione uma categoria</option>
+                                <option value="Feminino">Feminino</option>
+                                <option value="Masculino">Masculino</option>
+                                <option value="Infantil">Infantil</option>
+                            </select>
+                        </div>
+                        <div class="mb-4">
+                            <label for="tipo" class="block text-sm font-medium text-gray-700">Tipo</label>
+                            <div>
+                                <input type="radio" id="venda" name="tipo" value="Venda" required />
+                                <label for="venda">Venda</label>
+                                <input type="radio" id="troca" name="tipo" value="Troca" required />
+                                <label for="troca">Troca</label>
+                            </div>
+                        </div>
+                        <div class="mb-4" id="precoContainer" style="display: none;">
+                            <label for="preco" class="block text-sm font-medium text-gray-700">Preço</label>
+                            <input type="number" id="preco" name="preco" class="mt-1 block w-full border border-gray-300 rounded-md p-2" />
+                        </div>
+                        <div class="mb-4" id="preferenciaContainer" style="display: none;">
+                            <label for="preferencia" class="block text-sm font-medium text-gray-700">Preferência de Troca</label>
+                            <input type="text" id="preferencia" name="preferencia" class="mt-1 block w-full border border-gray-300 rounded-md p-2" />
+                        </div>
+                        <div class="mb-4">
+                            <label for="imagem" class="block text-sm font-medium text-gray-700">Imagem</label>
+                            <input type="file" id="imagem" name="imagem" accept="image/*" required class="mt-1 block w-full border border-gray-300 rounded-md p-2" />
+                        </div>
+                        <button type="submit" class="bg-green-500 text-white font-bold py-2 px-4 rounded-full hover:bg-green-600 transition-colors">Cadastrar Peça</button>
+                        <button type="button" id="closeModalButton" class="mt-2 text-gray-500 hover:text-gray-700">Cancelar</button>
+                    </form>
+                </div>
+            </div>
                 </div>
             </div>
 
-            <div class="mb-8">
+            <div class="mb-8 text">
                 <h3 class="text-2xl font-bold text-primary mb-4">Minhas Peças</h3>
-                <div id="myItemsGrid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-                    </div>
+                <div id="myItemsGrid" class="flex flex-wrap justify-center gap-6">
+                    <!-- Cards das peças serão inseridos aqui -->
+                </div>
             </div>
         </div>
     </main>
@@ -126,6 +174,10 @@
             const profilePhotoInput = document.getElementById('profilePhotoInput');
             const userName = document.getElementById('userName');
             const userEmail = document.getElementById('userEmail');
+            const addPieceButton = document.getElementById('addPieceButton');
+            const addPieceModal = document.getElementById('addPieceModal');
+            const closeModalButton = document.getElementById('closeModalButton');
+            const addPieceForm = document.getElementById('addPieceForm');
 
             // Carregar informações do usuário
             const loadUserInfo = async () => {
@@ -211,31 +263,133 @@
             });
 
             // Função para renderizar as peças do usuário
-            const renderUserItems = () => {
-                // Aqui você fará uma requisição ao seu servidor para buscar as peças do usuário logado
-                // Por enquanto, vamos usar dados de exemplo
-                const userItems = [
-                    { id: 1, titulo: "Vestido Floral", categoria: "Roupas", imagem: "https://via.placeholder.com/300" },
-                    { id: 2, titulo: "Bolsa de Couro", categoria: "Acessórios", imagem: "https://via.placeholder.com/300" },
-                    { id: 3, titulo: "Sandália de Verão", categoria: "Calçados", imagem: "https://via.placeholder.com/300" }
-                ];
-                
-                myItemsGrid.innerHTML = '';
-                userItems.forEach(item => {
-                    const itemCard = document.createElement('div');
-                    itemCard.className = 'item-card p-4 text-center';
-                    itemCard.innerHTML = `
-                        <img src="${item.imagem}" alt="${item.titulo}" class="w-full h-48 object-cover mb-4 rounded-lg">
-                        <h4 class="text-lg font-bold text-primary mb-1">${item.titulo}</h4>
-                        <p class="text-secondary mb-4">${item.categoria}</p>
-                        <div class="flex justify-center space-x-2">
-                            <button class="bg-blue-500 text-white font-bold py-1 px-3 rounded-full hover:bg-blue-600 transition-colors">Editar</button>
-                            <button class="bg-red-500 text-white font-bold py-1 px-3 rounded-full hover:bg-red-600 transition-colors">Excluir</button>
-                        </div>
-                    `;
-                    myItemsGrid.appendChild(itemCard);
-                });
+            const renderUserItems = async () => {
+                try {
+                    const response = await fetch('/pecas-usuario');
+                    const userItems = await response.json();
+                    
+                    myItemsGrid.innerHTML = '';
+                    
+                    if (userItems.length === 0) {
+                        myItemsGrid.innerHTML = '<p class="text-center text-secondary col-span-full">Você ainda não cadastrou nenhuma peça.</p>';
+                        return;
+                    }
+                    
+                    userItems.forEach(item => {
+                        const itemCard = document.createElement('div');
+                        itemCard.className = 'item-card p-4 text-center rounded-lg border border-gray-300';
+                        itemCard.innerHTML = `
+                            <img src="${item.imagem || 'https://via.placeholder.com/300'}" alt="${item.titulo}" class="w-full h-48 object-cover mb-4 rounded-lg">
+                            <h4 class="text-lg font-bold text-primary mb-1">${item.titulo}</h4>
+                        `;
+                        myItemsGrid.appendChild(itemCard);
+                    });
+                } catch (error) {
+                    console.error('Erro ao carregar peças do usuário:', error);
+                    myItemsGrid.innerHTML = '<p class="text-center text-red-500 col-span-full">Erro ao carregar suas peças.</p>';
+                }
             };
+
+            // Event listeners para o modal de adicionar peça
+            addPieceButton.addEventListener('click', () => {
+                menuList.classList.remove('active'); // Remover a abertura do menu
+                addPieceModal.classList.remove('hidden');
+            });
+
+            closeModalButton.addEventListener('click', () => {
+                addPieceModal.classList.add('hidden');
+            });
+
+            // Função para mostrar/ocultar campos dinâmicos
+            const toggleDynamicFields = () => {
+                const tipoVenda = document.getElementById('venda');
+                const tipoTroca = document.getElementById('troca');
+                const precoContainer = document.getElementById('precoContainer');
+                const preferenciaContainer = document.getElementById('preferenciaContainer');
+                const precoInput = document.getElementById('preco');
+                const preferenciaInput = document.getElementById('preferencia');
+
+                if (tipoVenda.checked) {
+                    precoContainer.style.display = 'block';
+                    preferenciaContainer.style.display = 'none';
+                    precoInput.required = true;
+                    preferenciaInput.required = false;
+                    preferenciaInput.value = ''; // Limpar campo de troca
+                } else if (tipoTroca.checked) {
+                    precoContainer.style.display = 'none';
+                    preferenciaContainer.style.display = 'block';
+                    precoInput.required = false;
+                    preferenciaInput.required = true;
+                    precoInput.value = ''; // Limpar campo de preço
+                } else {
+                    precoContainer.style.display = 'none';
+                    preferenciaContainer.style.display = 'none';
+                    precoInput.required = false;
+                    preferenciaInput.required = false;
+                }
+            };
+
+            // Adicionar event listeners para os radio buttons
+            document.getElementById('venda').addEventListener('change', toggleDynamicFields);
+            document.getElementById('troca').addEventListener('change', toggleDynamicFields);
+
+            // Validar preço (apenas números positivos)
+            document.getElementById('preco').addEventListener('input', (e) => {
+                if (e.target.value < 0) {
+                    e.target.value = 0;
+                }
+            });
+
+            addPieceForm.addEventListener('submit', async (event) => {
+                event.preventDefault();
+                
+                // Validação adicional
+                const tipoVenda = document.getElementById('venda').checked;
+                const tipoTroca = document.getElementById('troca').checked;
+                const preco = document.getElementById('preco').value;
+                const preferencia = document.getElementById('preferencia').value;
+
+                let errorMessage = '';
+
+                if (tipoVenda && (!preco || preco <= 0)) {
+                    errorMessage += 'Preço deve ser um número positivo.\n';
+                }
+
+                if (tipoTroca && !preferencia.trim()) {
+                    errorMessage += 'Item de troca é obrigatório.\n';
+                }
+
+                if (errorMessage) {
+                    alert(errorMessage);
+                    return;
+                }
+
+                const formData = new FormData(addPieceForm);
+                
+                try {
+                    const response = await fetch('/adicionar-peca', {
+                        method: 'POST',
+                        body: formData
+                    });
+                    
+                    if (response.ok) {
+                        alert('Peça cadastrada com sucesso!');
+                        addPieceModal.classList.add('hidden');
+                        addPieceForm.reset();
+                        // Resetar campos dinâmicos
+                        document.getElementById('precoContainer').style.display = 'none';
+                        document.getElementById('preferenciaContainer').style.display = 'none';
+                        // Atualizar a lista de peças do usuário
+                        renderUserItems();
+                    } else {
+                        const errorText = await response.text();
+                        alert('Erro ao cadastrar peça: ' + errorText);
+                    }
+                } catch (error) {
+                    console.error('Erro ao cadastrar peça:', error);
+                    alert('Erro ao cadastrar peça. Tente novamente.');
+                }
+            });
 
             // Carregar informações do usuário ao iniciar
             loadUserInfo();
