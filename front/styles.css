@@ -120,7 +120,7 @@
 
 /* Dark mode adjustments */
 [data-theme="dark"] .hero-gradient {
-    background-image: url('../image/banner2.png');
+    background-image: url('../image/banner.png');
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
@@ -300,7 +300,7 @@ footer {
 
 /* Hero section background image */
 .hero-gradient {
-  background-image: url('../image/banner2.png');
+  background-image: url('../image/banner.png');
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;

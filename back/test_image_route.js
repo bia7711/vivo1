@@ -5,7 +5,7 @@ const port = 3000;
 
 // Route to test image access
 app.get('/test-image', (req, res) => {
-    res.sendFile(path.join(__dirname, '../image/banner2.png'));
+    res.sendFile(path.join(__dirname, '../image/banner.png'));
 });
 
 // Start the server

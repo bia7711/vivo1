@@ -7,6 +7,7 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
     <link rel="stylesheet" href="styles.css">
+    <link rel="icon" type="image/png" href="../image/logo.png">
     <script src="theme.js" defer></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap');
@@ -45,6 +46,7 @@
             <button id="menuToggle" class="text-secondary text-2xl hover:text-primary">
                 <i class="fas fa-bars"></i>
             </button>
+           <img src="../image/logo.png" alt="Logo ReUse Jovem" class="w-[27px] h-[33px]">
             <h1 class="text-xl font-extrabold text-primary">ReUse Jovem</h1>
         </div>
         
@@ -91,13 +93,19 @@
                     <label for="senha" class="block text-primary font-semibold mb-2">Senha</label>
                     <input type="password" id="senha" name="senha" class="w-full p-3 border border-theme bg-input-bg text-primary rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 transition-colors" required>
                 </div>
-                <button type="submit" class="w-full bg-green-500 text-white font-bold py-3 px-4 rounded-lg shadow-lg hover:bg-green-600 transition-colors transform hover:scale-105">
-                    Entrar
+                <button type="submit" class="w-full bg-green-500 text-white font-bold py-3 px-4 rounded-lg shadow-lg hover:bg-green-600 transition-colors transform hover:scale-105"> 
+                Entrar
                 </button>
+                <div id="error-message" class="text-red-500 text-center mt-4 hidden">
+                    E-mail ou senha inválidos.
+                </div>
             </form>
             <p class="text-center text-secondary mt-6">
                 Não tem uma conta? <a href="cadastro.html" class="text-blue-500 hover:underline font-semibold transition-colors">Crie uma aqui</a>.
             </p>
+                <div class="flex justify-center mt-4">
+                    <a href="forgot-password.html" class="text-secondary hover:text-accent-color">Esqueceu a senha?</a>
+                </div>
         </div>
     </main>
 
@@ -143,5 +151,3 @@
             checkLoginStatus();
         });
     </script>
-</body>
-</html>
