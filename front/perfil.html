@@ -43,7 +43,7 @@
             box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
             transition: transform 0.3s ease-in-out;
             border: 1px solid var(--border-color);
-            width: 200px; /* Ajuste de largura para os cards */
+            width: 200px;
         }
         .item-card:hover {
             transform: translateY(-5px);
@@ -65,7 +65,7 @@
             
             <button id="negotiationsButton" class="relative bg-green-500 text-white rounded-full p-3 shadow-lg hover:bg-green-600 transition-colors">
                 <i class="fas fa-handshake" aria-label="Minhas Trocas"></i>
-                <span id="negotiationsCount" class="absolute top-0 right-0 transform translate-x-1/2 -translate-y-1/2 bg-red-500 text-white text-xs font-bold rounded-full h-5 w-5 flex items-center justify-center">0</span>
+                <span id="negotiationsCount" class="absolute top-0 right-0 transform translate-x-1/2 -translate-y-1/2 bg-red-500 text-white text-xs font-bold rounded-full h-5 w-5 flex items-center justify-center hidden">0</span>
             </button>
             <a id="profileLink" href="perfil.html" class="text-secondary hover:text-primary transition-colors" aria-label="Perfil">
                 <i class="fas fa-user-circle text-4xl"></i>
@@ -80,7 +80,7 @@
         <ul class="flex flex-col space-y-2 p-4">
             <li><a href="index.html" class="text-secondary hover:text-accent-color font-semibold transition-colors w-full text-left">Home</a></li>
             <li><a href="loja.html" class="text-secondary hover:text-accent-color font-semibold transition-colors w-full text-left">Loja</a></li>
-            <li><a href="index.html#sobre" class="text-secondary hover:text-accent-color font-semibold transition-colors w-full text-left">Sobre Nós</a></li>           
+            <li><a href="index.html#sobre" class="text-secondary hover:text-accent-color font-semibold transition-colors w-full text-left">Sobre Nós</a></li>              
         </ul>
     </nav>
     
@@ -97,74 +97,79 @@
                     </div>
                     <h2 id="userName" class="text-3xl font-bold text-primary">Nome do Usuário</h2>
                     <p id="userEmail" class="text-secondary">emaildousuario@exemplo.com</p>
-            <button id="addPieceButton" class="bg-green-500 text-white font-bold py-2 px-6 rounded-full shadow-lg mt-4 hover:bg-green-600 transition-colors">
-                Adicionar Nova Peça
-            </button>
-            <div id="addPieceModal" class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 hidden" style="z-index: 50;">
-                <div class="bg-white p-6 rounded-lg shadow-lg w-96" style="z-index: 60;">
-                    <h2 class="text-xl font-bold mb-4">Adicionar Nova Peça</h2>
-                    <form id="addPieceForm">
-                        <div class="mb-4">
-                            <label for="titulo" class="block text-sm font-medium text-gray-700">Título</label>
-                            <input type="text" id="titulo" name="titulo" required class="mt-1 block w-full border border-gray-300 rounded-md p-2" />
+                    <button id="addPieceButton" class="bg-green-500 text-white font-bold py-2 px-6 rounded-full shadow-lg mt-4 hover:bg-green-600 transition-colors">
+                        Adicionar Nova Peça
+                    </button>
+                    <div id="addPieceModal" class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 hidden" style="z-index: 50;">
+                        <div class="bg-white p-6 rounded-lg shadow-lg w-96" style="z-index: 60;">
+                            <h2 class="text-xl font-bold mb-4">Adicionar Nova Peça</h2>
+                            <form id="addPieceForm">
+                                <div class="mb-4">
+                                    <label for="titulo" class="block text-sm font-medium text-gray-700">Título</label>
+                                    <input type="text" id="titulo" name="titulo" required class="mt-1 block w-full border border-gray-300 rounded-md p-2" />
+                                </div>
+                                <div class="mb-4">
+                                    <label for="descricao" class="block text-sm font-medium text-gray-700">Descrição</label>
+                                    <textarea id="descricao" name="descricao" required class="mt-1 block w-full border border-gray-300 rounded-md p-2"></textarea>
+                                </div>
+                                <div class="mb-4">
+                                    <label for="categoria" class="block text-sm font-medium text-gray-700">Categoria</label>
+                                    <select id="categoria" name="categoria" required class="mt-1 block w-full border border-gray-300 rounded-md p-2">
+                                        <option value="">Selecione uma categoria</option>
+                                        <option value="Feminino">Feminino</option>
+                                        <option value="Masculino">Masculino</option>
+                                        <option value="Infantil">Infantil</option>
+                                    </select>
+                                </div>
+                                <div class="mb-4">
+                                    <label for="tipo" class="block text-sm font-medium text-gray-700">Tipo</label>
+                                    <div>
+                                        <input type="radio" id="venda" name="tipo" value="Venda" required />
+                                        <label for="venda">Venda</label>
+                                        <input type="radio" id="troca" name="tipo" value="Troca" required />
+                                        <label for="troca">Troca</label>
+                                    </div>
+                                </div>
+                                <div class="mb-4" id="precoContainer" style="display: none;">
+                                    <label for="preco" class="block text-sm font-medium text-gray-700">Preço</label>
+                                    <input type="number" id="preco" name="preco" class="mt-1 block w-full border border-gray-300 rounded-md p-2" />
+                                </div>
+                                <div class="mb-4" id="preferenciaContainer" style="display: none;">
+                                    <label for="preferencia" class="block text-sm font-medium text-gray-700">Preferência de Troca</label>
+                                    <input type="text" id="preferencia" name="preferencia" class="mt-1 block w-full border border-gray-300 rounded-md p-2" />
+                                </div>
+                                <div class="mb-4">
+                                    <label for="imagem" class="block text-sm font-medium text-gray-700">Imagem</label>
+                                    <input type="file" id="imagem" name="imagem" accept="image/*" required class="mt-1 block w-full border border-gray-300 rounded-md p-2" />
+                                </div>
+                                <button type="submit" class="bg-green-500 text-white font-bold py-2 px-4 rounded-full hover:bg-green-600 transition-colors">Cadastrar Peça</button>
+                                <button type="button" id="closeModalButton" class="mt-2 text-gray-500 hover:text-gray-700">Cancelar</button>
+                            </form>
                         </div>
-                        <div class="mb-4">
-                            <label for="descricao" class="block text-sm font-medium text-gray-700">Descrição</label>
-                            <textarea id="descricao" name="descricao" required class="mt-1 block w-full border border-gray-300 rounded-md p-2"></textarea>
-                        </div>
-                        <div class="mb-4">
-                            <label for="categoria" class="block text-sm font-medium text-gray-700">Categoria</label>
-                            <select id="categoria" name="categoria" required class="mt-1 block w-full border border-gray-300 rounded-md p-2">
-                                <option value="">Selecione uma categoria</option>
-                                <option value="Feminino">Feminino</option>
-                                <option value="Masculino">Masculino</option>
-                                <option value="Infantil">Infantil</option>
-                            </select>
-                        </div>
-                        <div class="mb-4">
-                            <label for="tipo" class="block text-sm font-medium text-gray-700">Tipo</label>
-                            <div>
-                                <input type="radio" id="venda" name="tipo" value="Venda" required />
-                                <label for="venda">Venda</label>
-                                <input type="radio" id="troca" name="tipo" value="Troca" required />
-                                <label for="troca">Troca</label>
-                            </div>
-                        </div>
-                        <div class="mb-4" id="precoContainer" style="display: none;">
-                            <label for="preco" class="block text-sm font-medium text-gray-700">Preço</label>
-                            <input type="number" id="preco" name="preco" class="mt-1 block w-full border border-gray-300 rounded-md p-2" />
-                        </div>
-                        <div class="mb-4" id="preferenciaContainer" style="display: none;">
-                            <label for="preferencia" class="block text-sm font-medium text-gray-700">Preferência de Troca</label>
-                            <input type="text" id="preferencia" name="preferencia" class="mt-1 block w-full border border-gray-300 rounded-md p-2" />
-                        </div>
-                        <div class="mb-4">
-                            <label for="imagem" class="block text-sm font-medium text-gray-700">Imagem</label>
-                            <input type="file" id="imagem" name="imagem" accept="image/*" required class="mt-1 block w-full border border-gray-300 rounded-md p-2" />
-                        </div>
-                        <button type="submit" class="bg-green-500 text-white font-bold py-2 px-4 rounded-full hover:bg-green-600 transition-colors">Cadastrar Peça</button>
-                        <button type="button" id="closeModalButton" class="mt-2 text-gray-500 hover:text-gray-700">Cancelar</button>
-                    </form>
-                </div>
-            </div>
+                    </div>
                 </div>
             </div>
 
-            <div class="mb-8 text">
-                <h3 class="text-2xl font-bold text-primary mb-4">Minhas Peças</h3>
+            <div class="flex justify-center space-x-4 mb-8">
+                <button id="myItemsButton" class="bg-green-500 text-white font-bold py-2 px-6 rounded-full shadow-lg hover:bg-green-600 transition-colors">
+                    Minhas Peças
+                </button>
+                <button id="negotiationsButton" class="bg-gray-800 text-white font-bold py-2 px-6 rounded-full shadow-lg hover:bg-gray-700 transition-colors">
+                    Minhas Negociações
+                </button>
+            </div>
+
+            <div id="myItemsSection" class="mb-8">
                 <div id="myItemsGrid" class="flex flex-wrap justify-center gap-6">
-                    <!-- Cards das peças serão inseridos aqui -->
-                </div>
+                    </div>
+            </div>
+
+            <div id="negotiationsSection" class="mb-8 hidden">
+                <div id="negotiationsList" class="space-y-4">
+                    </div>
             </div>
         </div>
     </main>
-
-    <footer class="w-full mt-auto p-4 rounded-t-lg shadow-md bg-primary">
-        <p class="text-secondary font-semibold text-center">
-            Juntos, podemos fazer a nossa parte.
-        </p>
-    </footer>
-
     <script>
         document.addEventListener('DOMContentLoaded', () => {
             const menuToggle = document.getElementById('menuToggle');
@@ -179,6 +184,18 @@
             const addPieceModal = document.getElementById('addPieceModal');
             const closeModalButton = document.getElementById('closeModalButton');
             const addPieceForm = document.getElementById('addPieceForm');
+            
+            // Novos botões de alternância
+            const myItemsButton = document.getElementById('myItemsButton');
+            const negotiationsButton = document.getElementById('negotiationsButton');
+
+            const myItemsSection = document.getElementById('myItemsSection');
+            const negotiationsSection = document.getElementById('negotiationsSection');
+            const negotiationsList = document.getElementById('negotiationsList');
+            const negotiationsCount = document.getElementById('negotiationsCount');
+            const loggedInButtons = document.getElementById('loggedInButtons');
+            const loggedOutButtons = document.getElementById('loggedOutButtons');
+            const logoutButton = document.getElementById('logoutButton');
 
             // Carregar informações do usuário
             const loadUserInfo = async () => {
@@ -194,12 +211,16 @@
                         if (data.user.fotoPerfil) {
                             profileImage.src = data.user.fotoPerfil;
                         }
+                    } else {
+                        // Se não estiver logado, redireciona para o login
+                        window.location.href = 'login.html';
                     }
                 } catch (error) {
                     console.error('Erro ao carregar informações do usuário:', error);
+                    window.location.href = 'login.html';
                 }
             };
-
+            
             // Função para fazer upload da foto de perfil
             const uploadProfilePhoto = async (file) => {
                 try {
@@ -235,18 +256,6 @@
             profilePhotoInput.addEventListener('change', (event) => {
                 const file = event.target.files[0];
                 if (file) {
-                    // Verificar se é uma imagem
-                    if (!file.type.startsWith('image/')) {
-                        alert('Por favor, selecione apenas arquivos de imagem.');
-                        return;
-                    }
-
-                    // Verificar tamanho do arquivo (5MB)
-                    if (file.size > 5 * 1024 * 1024) {
-                        alert('A imagem deve ter no máximo 5MB.');
-                        return;
-                    }
-
                     // Criar preview da imagem
                     const reader = new FileReader();
                     reader.onload = (e) => {
@@ -291,14 +300,69 @@
                 }
             };
 
+            // Função para buscar e exibir as negociações
+            const fetchAndRenderNegotiations = async () => {
+                try {
+                    const response = await fetch('/minhas-negociacoes');
+                    if (!response.ok) {
+                        throw new Error('Erro ao buscar negociações');
+                    }
+                    const negotiationsData = await response.json();
+
+                    negotiationsList.innerHTML = '';
+                    
+                    if (negotiationsData.length === 0) {
+                        negotiationsList.innerHTML = '<p class="text-center text-secondary">Você não tem negociações ativas no momento.</p>';
+                    } else {
+                        negotiationsData.forEach(negociacao => {
+                            const negCard = document.createElement('div');
+                            negCard.className = 'bg-card-bg p-4 rounded-lg shadow-sm border border-theme flex items-center space-x-4';
+                            negCard.innerHTML = `
+                                <img src="${negociacao.imagemPeca || 'https://via.placeholder.com/100'}" alt="Imagem da peça" class="w-16 h-16 object-cover rounded-md">
+                                <div>
+                                    <h4 class="text-lg font-semibold text-primary">${negociacao.tituloPeca}</h4>
+                                    <p class="text-sm text-secondary">Status: <span class="font-bold">${negociacao.status}</span></p>
+                                    <p class="text-sm text-secondary">Mensagem: "${negociacao.mensagem}"</p>
+                                </div>
+                            `;
+                            negotiationsList.appendChild(negCard);
+                        });
+                    }
+                } catch (error) {
+                    console.error('Erro ao carregar negociações:', error);
+                    negotiationsList.innerHTML = '<p class="text-center text-red-500">Erro ao carregar negociações.</p>';
+                }
+            };
+            
             // Event listeners para o modal de adicionar peça
             addPieceButton.addEventListener('click', () => {
-                menuList.classList.remove('active'); // Remover a abertura do menu
                 addPieceModal.classList.remove('hidden');
+                menuList.classList.remove('active');
             });
 
             closeModalButton.addEventListener('click', () => {
                 addPieceModal.classList.add('hidden');
+            });
+
+            // Lógica para alternar as seções
+            myItemsButton.addEventListener('click', () => {
+                myItemsSection.classList.remove('hidden');
+                negotiationsSection.classList.add('hidden');
+                renderUserItems(); // Opcional: recarrega a lista de peças
+                myItemsButton.classList.remove('bg-gray-800', 'text-white');
+                myItemsButton.classList.add('bg-green-500', 'text-white');
+                negotiationsButton.classList.add('bg-gray-800', 'text-white');
+                negotiationsButton.classList.remove('bg-green-500', 'text-white');
+            });
+
+            negotiationsButton.addEventListener('click', () => {
+                myItemsSection.classList.add('hidden');
+                negotiationsSection.classList.remove('hidden');
+                fetchAndRenderNegotiations();
+                negotiationsButton.classList.remove('bg-gray-800', 'text-white');
+                negotiationsButton.classList.add('bg-green-500', 'text-white');
+                myItemsButton.classList.add('bg-gray-800', 'text-white');
+                myItemsButton.classList.remove('bg-green-500', 'text-white');
             });
 
             // Função para mostrar/ocultar campos dinâmicos
@@ -315,13 +379,13 @@
                     preferenciaContainer.style.display = 'none';
                     precoInput.required = true;
                     preferenciaInput.required = false;
-                    preferenciaInput.value = ''; // Limpar campo de troca
+                    preferenciaInput.value = '';
                 } else if (tipoTroca.checked) {
                     precoContainer.style.display = 'none';
                     preferenciaContainer.style.display = 'block';
                     precoInput.required = false;
                     preferenciaInput.required = true;
-                    precoInput.value = ''; // Limpar campo de preço
+                    precoInput.value = '';
                 } else {
                     precoContainer.style.display = 'none';
                     preferenciaContainer.style.display = 'none';
@@ -377,10 +441,6 @@
                         alert('Peça cadastrada com sucesso!');
                         addPieceModal.classList.add('hidden');
                         addPieceForm.reset();
-                        // Resetar campos dinâmicos
-                        document.getElementById('precoContainer').style.display = 'none';
-                        document.getElementById('preferenciaContainer').style.display = 'none';
-                        // Atualizar a lista de peças do usuário
                         renderUserItems();
                     } else {
                         const errorText = await response.text();
@@ -392,9 +452,54 @@
                 }
             });
 
-            // Carregar informações do usuário ao iniciar
+            // Função para verificar status de login
+            const checkLoginStatus = async () => {
+                try {
+                    const response = await fetch('/status');
+                    const data = await response.json();
+                    
+                    if (data.loggedIn) {
+                        loggedInButtons.classList.remove('hidden');
+                        loggedInButtons.classList.add('flex');
+                        loggedOutButtons.classList.add('hidden');
+                        updateNegotiationsCount(data.negociacoesPendentes);
+                    } else {
+                        loggedOutButtons.classList.remove('hidden');
+                        loggedOutButtons.classList.add('flex');
+                        loggedInButtons.classList.add('hidden');
+                    }
+                } catch (error) {
+                    console.error('Erro ao verificar status de login:', error);
+                }
+            };
+            
+            // Função para atualizar o contador de negociações no botão
+            const updateNegotiationsCount = (count) => {
+                const negotiationsButton = document.getElementById('negotiationsButton');
+                if (count > 0) {
+                    const negotiationsCountSpan = negotiationsButton.querySelector('#negotiationsCount');
+                    negotiationsCountSpan.textContent = count;
+                    negotiationsCountSpan.classList.remove('hidden');
+                } else {
+                    const negotiationsCountSpan = negotiationsButton.querySelector('#negotiationsCount');
+                    negotiationsCountSpan.classList.add('hidden');
+                }
+            };
+
+            // Lógica de logout
+            logoutButton.addEventListener('click', async () => {
+                try {
+                    await fetch('/logout', { method: 'POST' });
+                    window.location.href = 'login.html';
+                } catch (error) {
+                    console.error('Erro ao fazer logout:', error);
+                }
+            });
+
+            // Carregar informações do usuário e peças ao iniciar
             loadUserInfo();
             renderUserItems();
+            checkLoginStatus();
         });
     </script>
 </body>

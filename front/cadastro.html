@@ -15,7 +15,7 @@
             font-family: 'Poppins', sans-serif;
             background-color: var(--bg-primary);
         }
-        .cadastro-container {
+        .login-container {
             background-color: var(--card-bg);
             border-radius: 1rem;
             box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
@@ -46,6 +46,7 @@
             <button id="menuToggle" class="text-secondary text-2xl hover:text-primary">
                 <i class="fas fa-bars"></i>
             </button>
+            <img src="../image/logo.png" alt="Logo ReUse Jovem" class="w-[27px] h-[33px]">
             <h1 class="text-xl font-extrabold text-primary">ReUse Jovem</h1>
         </div>
         
@@ -76,14 +77,14 @@
         <ul class="flex flex-col space-y-2 p-4">
             <li><a href="index.html" class="text-secondary hover:text-accent-color font-semibold transition-colors w-full text-left">Home</a></li>
             <li><a href="loja.html" class="text-secondary hover:text-accent-color font-semibold transition-colors w-full text-left">Loja</a></li>
-            <li><a href="index.html#sobre" class="text-secondary hover:text-accent-color font-semibold transition-colors w-full text-left">Sobre Nós</a></li>           
+            <li><a href="index.html#sobre" class="text-secondary hover:text-accent-color font-semibold transition-colors w-full text-left">Sobre Nós</a></li>          
         </ul>
     </nav>
 
     <main class="flex-grow flex items-center justify-center p-8">
-        <div class="cadastro-container p-10 w-full max-w-md">
-<h2 class="text-3xl font-bold text-center mb-8" style="color: #22c55e;">Criar Conta</h2>
-            <form action="/cadastro" method="POST" class="space-y-6" id="cadastroForm">
+        <div class="login-container p-10 w-full max-w-md">
+            <h2 class="text-3xl font-bold text-center mb-8" style="color: #22C55E;">Criar uma conta</h2>
+            <form id="cadastroForm" class="space-y-6">
                 <div>
                     <label for="nome" class="block text-primary font-semibold mb-2">Nome Completo</label>
                     <input type="text" id="nome" name="nome" class="w-full p-3 border border-theme bg-input-bg text-primary rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 transition-colors" required>
@@ -96,17 +97,12 @@
                     <label for="senha" class="block text-primary font-semibold mb-2">Senha</label>
                     <input type="password" id="senha" name="senha" class="w-full p-3 border border-theme bg-input-bg text-primary rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 transition-colors" required>
                 </div>
-                <div>
-                    <label for="confirmarSenha" class="block text-primary font-semibold mb-2">Confirmar Senha</label>
-                    <input type="password" id="confirmarSenha" name="confirmarSenha" class="w-full p-3 border border-theme bg-input-bg text-primary rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 transition-colors" required>
-                    <p id="passwordError" class="text-red-500 text-sm mt-2 hidden">As senhas não coincidem.</p>
-                </div>
-                <button type="submit" class="w-full bg-green-500 text-white font-bold py-3 px-4 rounded-lg shadow-lg hover:bg-green-600 transition-colors transform hover:scale-105">
+                <button type="submit" class="w-full bg-green-500 text-white font-bold py-3 px-4 rounded-lg shadow-lg hover:bg-green-600 transition-colors transform hover:scale-105"> 
                     Criar Conta
                 </button>
             </form>
             <p class="text-center text-secondary mt-6">
-                Já tem uma conta? <a href="login.html" class="text-blue-500 hover:underline font-semibold transition-colors">Entre aqui</a>.
+                Já tem uma conta? <a href="login.html" class="text-blue-500 hover:underline font-semibold transition-colors">Faça login aqui</a>.
             </p>
         </div>
     </main>
@@ -119,10 +115,7 @@
             const loggedOutButtons = document.getElementById('loggedOutButtons');
             const logoutButton = document.getElementById('logoutButton');
             const cadastroForm = document.getElementById('cadastroForm');
-            const senhaInput = document.getElementById('senha');
-            const confirmarSenhaInput = document.getElementById('confirmarSenha');
-            const passwordError = document.getElementById('passwordError');
-            
+
             menuToggle.addEventListener('click', () => {
                 menuList.classList.toggle('active');
             });
@@ -154,12 +147,29 @@
                 }
             });
 
-            cadastroForm.addEventListener('submit', (event) => {
-                if (senhaInput.value !== confirmarSenhaInput.value) {
-                    event.preventDefault();
-                    passwordError.classList.remove('hidden');
-                } else {
-                    passwordError.classList.add('hidden');
+            // Lógica para o formulário de cadastro
+            cadastroForm.addEventListener('submit', async (event) => {
+                event.preventDefault();
+
+                const form = event.target;
+                const formData = new FormData(form);
+
+                try {
+                    const response = await fetch('/cadastro', {
+                        method: 'POST',
+                        body: new URLSearchParams(formData)
+                    });
+
+                    if (response.ok) {
+                        // Se o cadastro for bem-sucedido, redireciona para a página de perfil
+                        window.location.href = 'perfil.html';
+                    } else {
+                        const errorText = await response.text();
+                        alert(errorText);
+                    }
+                } catch (error) {
+                    console.error('Erro de cadastro:', error);
+                    alert('Erro ao tentar cadastrar. Tente novamente.');
                 }
             });
 
