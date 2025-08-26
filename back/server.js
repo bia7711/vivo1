@@ -104,15 +104,15 @@ const negociacoes = []; // NOVO ARRAY PARA ARMAZENAR AS NEGOCIAÇÕES
 
 // Peças de exemplo para exibir se a loja estiver vazia
 const pecasDeExemplo = [
-    { id: 'ex-1', titulo: "Camiseta Branca", descricao: "Perfeita para o dia a dia, em bom estado.", tipo: "Troca", categoria: "Masculino", imagem: "https://placehold.co/400x400/FFF/000?text=Camiseta+Branca" },
-    { id: 'ex-2', titulo: "Camiseta Preta", descricao: "Pouco usada, ideal para qualquer ocasião.", tipo: "Troca", categoria: "Masculino", imagem: "https://placehold.co/400x400/000/FFF?text=Camiseta+Preta" },
-    { id: 'ex-3', titulo: "Calça Jeans", descricao: "Calça de marca, em excelente estado.", tipo: "Troca", categoria: "Feminino", imagem: "https://placehold.co/400x400/6B7280/FFF?text=Calça+Jeans" },
-    { id: 'ex-4', titulo: "Jaqueta de Couro", descricao: "Jaqueta vintage de alta qualidade.", tipo: "Venda", preco: 189.90, categoria: "Masculino", imagem: "https://placehold.co/400x400/292524/E5E7EB?text=Jaqueta+de+Couro" },
-    { id: 'ex-5', titulo: "Vestido Floral", descricao: "Vestido leve, com estampa vibrante.", tipo: "Troca", categoria: "Feminino", imagem: "https://placehold.co/400x400/FCA5A5/FFF?text=Vestido+Floral" },
-    { id: 'ex-6', titulo: "Blusa de Frio", descricao: "Blusa de lã para crianças, muito quentinha.", tipo: "Troca", categoria: "Infantil", imagem: "https://placehold.co/400x400/FDBA74/FFF?text=Blusa+de+Frio" },
-    { id: 'ex-7', titulo: "Tênis Casual", descricao: "Tênis esportivo, poucas marcas de uso.", tipo: "Venda", preco: 120.00, categoria: "Masculino", imagem: "https://placehold.co/400x400/9CA3AF/FFF?text=Tênis+Casual" },
-    { id: 'ex-8', titulo: "Saia Plissada", descricao: "Saia elegante, perfeita para eventos.", tipo: "Troca", categoria: "Feminino", imagem: "https://placehold.co/400x400/F472B6/FFF?text=Saia+Plissada" },
-    { id: 'ex-9', titulo: "Shorts Infantil", descricao: "Shorts de algodão, confortável para brincar.", tipo: "Troca", categoria: "Infantil", imagem: "https://placehold.co/400x400/34D399/FFF?text=Shorts+Infantil" }
+    { id: 'ex-1', titulo: "Camiseta Branca", descricao: "Perfeita para o dia a dia, em bom estado.", tipo: "Troca", categoria: "Masculino", imagem: "/image/logo.png" },
+    { id: 'ex-2', titulo: "Camiseta Preta", descricao: "Pouco usada, ideal para qualquer ocasião.", tipo: "Troca", categoria: "Masculino", imagem: "/image/logo.png" },
+    { id: 'ex-3', titulo: "Calça Jeans", descricao: "Calça de marca, em excelente estado.", tipo: "Troca", categoria: "Feminino", imagem: "/image/logo.png" },
+    { id: 'ex-4', titulo: "Jaqueta de Couro", descricao: "Jaqueta vintage de alta qualidade.", tipo: "Venda", preco: 189.90, categoria: "Masculino", imagem: "/image/logo.png" },
+    { id: 'ex-5', titulo: "Vestido Floral", descricao: "Vestido leve, com estampa vibrante.", tipo: "Troca", categoria: "Feminino", imagem: "/image/logo.png" },
+    { id: 'ex-6', titulo: "Blusa de Frio", descricao: "Blusa de lã para crianças, muito quentinha.", tipo: "Troca", categoria: "Infantil", imagem: "/image/logo.png" },
+    { id: 'ex-7', titulo: "Tênis Casual", descricao: "Tênis esportivo, poucas marcas de uso.", tipo: "Venda", preco: 120.00, categoria: "Masculino", imagem: "/image/logo.png" },
+    { id: 'ex-8', titulo: "Saia Plissada", descricao: "Saia elegante, perfeita para eventos.", tipo: "Troca", categoria: "Feminino", imagem: "/image/logo.png" },
+    { id: 'ex-9', titulo: "Shorts Infantil", descricao: "Shorts de algodão, confortável para brincar.", tipo: "Troca", categoria: "Infantil", imagem: "/image/logo.png" }
 ];
 
 // Middleware para verificar se o usuário está autenticado
@@ -190,16 +190,35 @@ app.post('/login', (req, res) => {
 
 app.get('/pecas', (req, res) => {
     const { id } = req.query; // Obter o ID do produto dos parâmetros de consulta
-    console.log('Buscando peça com ID:', id); // Log para depuração
+    console.log('Buscando peça com ID:', id, 'Tipo:', typeof id); // Log para depuração
+    
     if (id) {
         // Usar comparação não estrita para lidar com string vs number
-        const peca = pecas.find(p => p.id == id) || pecasDeExemplo.find(p => p.id == id);
+        console.log('Procurando peça real com ID:', id);
+        const pecaReal = pecas.find(p => {
+            console.log('Comparando:', p.id, '==', id, 'Resultado:', p.id == id);
+            return p.id == id;
+        });
+        
+        console.log('Procurando peça de exemplo com ID:', id);
+        const pecaExemplo = pecasDeExemplo.find(p => {
+            console.log('Comparando:', p.id, '==', id, 'Resultado:', p.id == id);
+            return p.id == id;
+        });
+        
+        const peca = pecaReal || pecaExemplo;
+        
         if (peca) {
+            console.log('Peça encontrada:', peca);
             return res.json(peca); // Return the specific product
         } else {
+            console.log('Produto não encontrado - IDs disponíveis:');
+            console.log('Pecas reais:', pecas.map(p => ({id: p.id, tipo: typeof p.id})));
+            console.log('Pecas exemplo:', pecasDeExemplo.map(p => ({id: p.id, tipo: typeof p.id})));
             return res.status(404).send('Produto não encontrado');
         }
     }
+    console.log('Retornando todas as peças');
     const todasAsPecas = [...pecas, ...pecasDeExemplo];
     res.json(todasAsPecas);
 });
@@ -398,27 +417,38 @@ app.post('/upload-profile-photo', verificarAutenticacao, upload.single('profileP
     res.json({ success: true, fotoPerfil: usuario.fotoPerfil });
 });
 
-// Rota para criar proposta de troca (nova estrutura)
 app.post('/troca', verificarAutenticacao, (req, res) => {
+    console.log('Request body:', req.body); // Log the incoming request body
     const { idPecaOrigem, idPecaDestino } = req.body;
     const idUsuarioOrigem = req.session.userId;
 
+    console.log('Recebendo proposta de troca:', { idPecaOrigem, idPecaDestino, idUsuarioOrigem });
+
     // Busca a peça destino (peça da loja)
+    console.log('Buscando peça destino com ID:', idPecaDestino);
     const pecaDestino = pecas.find(p => p.id == idPecaDestino);
     
     if (!pecaDestino) {
+        console.log('Peça destino não encontrada. IDs disponíveis:', pecas.map(p => p.id));
         return res.status(404).send('Peça não encontrada.');
     }
 
+    console.log('Peça destino encontrada:', pecaDestino);
+
     if (pecaDestino.idUsuario === idUsuarioOrigem) {
+        console.log('Usuário tentando negociar sua própria peça');
         return res.status(400).send('Não é possível negociar sua própria peça.');
     }
 
     // Verifica se a peça origem pertence ao usuário
+    console.log('Buscando peça origem com ID:', idPecaOrigem);
     const pecaOrigem = pecas.find(p => p.id == idPecaOrigem && p.idUsuario === idUsuarioOrigem);
     if (!pecaOrigem) {
+        console.log('Peça origem não encontrada ou não pertence ao usuário. IDs disponíveis:', pecas.map(p => p.id));
         return res.status(400).send('Peça ofertada não encontrada ou não pertence a você.');
     }
+
+    console.log('Peça origem encontrada:', pecaOrigem);
 
     // Verifica se já existe uma proposta para esta combinação
     const propostaExistente = negociacoes.find(n => 
@@ -429,6 +459,7 @@ app.post('/troca', verificarAutenticacao, (req, res) => {
     );
 
     if (propostaExistente) {
+        console.log('Proposta já existe para esta combinação');
         return res.status(400).send('Você já enviou uma proposta para esta troca.');
     }
 
@@ -444,6 +475,7 @@ app.post('/troca', verificarAutenticacao, (req, res) => {
     };
 
     negociacoes.push(novaNegociacao);
+    console.log('Nova negociação criada:', novaNegociacao);
     res.status(200).send('Requisição de troca enviada');
     console.log(`Nova proposta de troca: ${idUsuarioOrigem} oferece peça ${idPecaOrigem} pela peça ${idPecaDestino} de ${pecaDestino.idUsuario}`);
 });

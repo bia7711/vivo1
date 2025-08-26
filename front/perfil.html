@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="pt-br">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -11,10 +12,24 @@
     <script src="theme.js" defer></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap');
-        body {
-            font-family: 'Poppins', sans-serif;
-            background-color: var(--bg-primary);
+
+        .info-card {
+            background-color: var(--card-bg);
+            border-radius: 1rem;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            transition: transform 0.3s ease-in-out;
+            cursor: pointer;
+            border: 1px solid var(--border-color);
         }
+
+        .info-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .text-shadow-custom {
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+        }
+
         #menuList {
             position: fixed;
             top: 68px;
@@ -22,155 +37,221 @@
             width: 250px;
             height: 100vh;
             background-color: var(--header-bg);
-            box-shadow: 2px 0 5px rgba(0,0,0,0.1);
+            box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
             transition: transform 0.3s ease-in-out;
             transform: translateX(-100%);
             z-index: 40;
             border-right: 1px solid var(--border-color);
         }
+
         #menuList.active {
             transform: translateX(0);
         }
-        .profile-card {
+
+        .item-card {
             background-color: var(--card-bg);
             border-radius: 1rem;
             box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
-            border: 1px solid var(--border-color);
-        }
-        .item-card {
-            background-color: var(--card-bg);
-            border-radius: 0.75rem;
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
             transition: transform 0.3s ease-in-out;
             border: 1px solid var(--border-color);
-            width: 200px;
+            width: 280px;
         }
+
         .item-card:hover {
             transform: translateY(-5px);
         }
     </style>
 </head>
+
 <body class="flex flex-col min-h-screen">
-    
-    <header class="shadow-md p-4 flex justify-between items-center sticky top-0 z-50 w-full bg-primary border-b border-theme">
+
+    <header class="shadow-md p-4 flex justify-between items-center sticky top-0 z-50 bg-primary border-b border-theme">
         <div class="flex items-center space-x-4">
             <button id="menuToggle" class="text-secondary text-2xl hover:text-primary">
                 <i class="fas fa-bars"></i>
             </button>
             <h1 class="text-xl font-extrabold text-primary">ReUse Jovem</h1>
         </div>
-        
-        <div class="flex items-center space-x-4 ml-auto">
+
+        <div class="flex items-center space-x-4">
             <button id="themeToggle" class="theme-toggle" aria-label="Alternar modo escuro"></button>
-            
+
             <!-- Botão de Notificações (sino) -->
-            <button id="notificationsButton" class="relative bg-blue-500 text-white rounded-full p-3 shadow-lg hover:bg-blue-600 transition-colors">
+            <button id="notificationsButton"
+                class="relative bg-green-500 text-white rounded-full p-3 shadow-lg hover:bg-green-600 transition-colors">
                 <i class="fas fa-bell" aria-label="Notificações"></i>
-                <span id="notificationsCount" class="absolute top-0 right-0 transform translate-x-1/2 -translate-y-1/2 bg-red-500 text-white text-xs font-bold rounded-full h-5 w-5 flex items-center justify-center hidden">0</span>
+                <span id="notificationsCount"
+                    class="absolute top-0 right-0 transform translate-x-1/2 -translate-y-1/2 bg-red-500 text-white text-xs font-bold rounded-full h-5 w-5 flex items-center justify-center hidden">0</span>
             </button>
-            
-            <a id="profileLink" href="perfil.html" class="text-secondary hover:text-primary transition-colors" aria-label="Perfil">
+
+            <a id="profileLink" href="perfil.html" class="text-secondary hover:text-primary transition-colors"
+                aria-label="Perfil">
                 <i class="fas fa-user-circle text-4xl"></i>
             </a>
-            <button id="logoutButton" class="bg-gray-800 text-white font-bold py-2 px-4 rounded-full shadow-lg hover:bg-gray-700 transition-colors hidden">
+            <button id="logoutButton"
+                class="bg-gray-800 text-white font-bold py-2 px-4 rounded-full shadow-lg hover:bg-gray-700 transition-colors">
                 Sair
             </button>
         </div>
     </header>
-    
+
     <nav id="menuList">
         <ul class="flex flex-col space-y-2 p-4">
-            <li><a href="index.html" class="text-secondary hover:text-accent-color font-semibold transition-colors w-full text-left">Home</a></li>
-            <li><a href="loja.html" class="text-secondary hover:text-accent-color font-semibold transition-colors w-full text-left">Loja</a></li>
-            <li><a href="index.html#sobre" class="text-secondary hover:text-accent-color font-semibold transition-colors w-full text-left">Sobre Nós</a></li>              
+            <li><a href="index.html"
+                    class="text-secondary hover:text-accent-color font-semibold transition-colors w-full text-left">Home</a>
+            </li>
+            <li><a href="loja.html"
+                    class="text-secondary hover:text-accent-color font-semibold transition-colors w-full text-left">Loja</a>
+            </li>
+            <li><a href="index.html#sobre"
+                    class="text-secondary hover:text-accent-color font-semibold transition-colors w-full text-left">Sobre
+                    Nós</a></li>
         </ul>
     </nav>
-    
-    <main class="flex-grow p-8">
-        <div class="max-w-6xl mx-auto">
-            <div class="profile-card p-8 mb-8 text-center">
-                <div class="flex flex-col items-center">
-                    <div class="relative group cursor-pointer mb-4">
-                        <img id="profileImage" src="https://via.placeholder.com/150" alt="Foto de Perfil" class="w-32 h-32 rounded-full object-cover border-4 border-green-500 transition-all duration-300 group-hover:opacity-70">
-                        <div class="absolute inset-0 bg-black bg-opacity-40 rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                            <i class="fas fa-camera text-white text-2xl"></i>
+
+    <main class="flex-grow">
+        <!-- Hero Section similar to home page -->
+        <section class="hero-gradient text-white text-center py-16 px-8">
+            <div class="max-w-4xl mx-auto">
+                <h2 class="text-4xl md:text-5xl font-extrabold mb-4 text-shadow-custom" style="color: #ffffff">
+                    Seu <text id="reuse">Perfil</text>
+                </h2>
+                <p class="text-lg md:text-xl font-light mb-8 max-w-2xl mx-auto" style="color: #ffffff">
+                    Gerencie suas peças, acompanhe negociações e faça parte da comunidade sustentável.
+                </p>
+            </div>
+        </section>
+
+        <section class="py-12 px-8 bg-primary">
+            <div class="max-w-6xl mx-auto">
+                <!-- Profile Card -->
+                <div class="p-8 mb-8 border-b border-green-500/50">
+                    <div class="flex flex-col md:flex-row items-center md:items-start">
+
+                        <!-- Foto de Perfil -->
+                        <div class="relative group cursor-pointer mb-6 md:mb-0">
+                            <img id="profileImage" src="../image/logo.png" alt="Foto de Perfil"
+                                class="w-32 h-32 md:w-36 md:h-36 rounded-full object-cover border-4 border-green-500 transition-all duration-300 group-hover:opacity-70">
+
+                            <div
+                                class="absolute inset-0 bg-black bg-opacity-40 rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                                <i class="fas fa-camera text-white text-2xl"></i>
+                            </div>
+
+                            <input type="file" id="profilePhotoInput" accept="image/*" class="hidden">
                         </div>
-                        <input type="file" id="profilePhotoInput" accept="image/*" class="hidden">
+
+                        <!-- Informações do Usuário -->
+                        <div class="ml-0 md:ml-8 text-center md:text-left flex flex-col items-center md:items-start">
+                            <h2 id="userName" class="text-3xl md:text-4xl font-bold text-primary mb-2">Nome do Usuário
+                            </h2>
+                            <p id="userEmail" class="text-secondary text-lg md:text-xl mb-6">emaildousuario@exemplo.com
+                            </p>
+
+                            <button id="addPieceButton"
+                                class="bg-green-500 text-white font-bold py-3 px-8 rounded-full text-lg shadow-lg hover:bg-green-600 transition-transform transform hover:scale-105">
+                                Adicionar Nova Peça
+                            </button>
+                        </div>
+
                     </div>
-                    <h2 id="userName" class="text-3xl font-bold text-primary">Nome do Usuário</h2>
-                    <p id="userEmail" class="text-secondary">emaildousuario@exemplo.com</p>
-                    <button id="addPieceButton" class="bg-green-500 text-white font-bold py-2 px-6 rounded-full shadow-lg mt-4 hover:bg-green-600 transition-colors">
-                        Adicionar Nova Peça
+                </div>
+
+
+                <!-- Modal de Adicionar Peça -->
+                <div id="addPieceModal"
+                    class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 hidden"
+                    style="z-index: 50;">
+                    <div class="bg-white p-6 rounded-lg shadow-lg w-96" style="z-index: 60;">
+                        <h2 class="text-xl font-bold mb-4">Adicionar Nova Peça</h2>
+                        <form id="addPieceForm">
+                            <div class="mb-4">
+                                <label for="titulo" class="block text-sm font-medium text-gray-700">Título</label>
+                                <input type="text" id="titulo" name="titulo" required
+                                    class="mt-1 block w-full border border-gray-300 rounded-md p-2" />
+                            </div>
+                            <div class="mb-4">
+                                <label for="descricao" class="block text-sm font-medium text-gray-700">Descrição</label>
+                                <textarea id="descricao" name="descricao" required
+                                    class="mt-1 block w-full border border-gray-300 rounded-md p-2"></textarea>
+                            </div>
+                            <div class="mb-4">
+                                <label for="categoria" class="block text-sm font-medium text-gray-700">Categoria</label>
+                                <select id="categoria" name="categoria" required
+                                    class="mt-1 block w-full border border-gray-300 rounded-md p-2">
+                                    <option value="">Selecione uma categoria</option>
+                                    <option value="Feminino">Feminino</option>
+                                    <option value="Masculino">Masculino</option>
+                                    <option value="Infantil">Infantil</option>
+                                </select>
+                            </div>
+                            <div class="mb-4">
+                                <label for="tipo" class="block text-sm font-medium text-gray-700">Tipo</label>
+                                <div class="flex space-x-4">
+                                    <label class="flex items-center">
+                                        <input type="radio" id="venda" name="tipo" value="Venda" required
+                                            class="mr-2" />
+                                        Venda
+                                    </label>
+                                    <label class="flex items-center">
+                                        <input type="radio" id="troca" name="tipo" value="Troca" required
+                                            class="mr-2" />
+                                        Troca
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="mb-4" id="precoContainer" style="display: none;">
+                                <label for="preco" class="block text-sm font-medium text-gray-700">Preço</label>
+                                <input type="number" id="preco" name="preco"
+                                    class="mt-1 block w-full border border-gray-300 rounded-md p-2" />
+                            </div>
+                            <div class="mb-4" id="preferenciaContainer" style="display: none;">
+                                <label for="preferencia" class="block text-sm font-medium text-gray-700">Preferência de
+                                    Troca</label>
+                                <input type="text" id="preferencia" name="preferencia"
+                                    class="mt-1 block w-full border border-gray-300 rounded-md p-2" />
+                            </div>
+                            <div class="mb-4">
+                                <label for="imagem" class="block text-sm font-medium text-gray-700">Imagem</label>
+                                <input type="file" id="imagem" name="imagem" accept="image/*" required
+                                    class="mt-1 block w-full border border-gray-300 rounded-md p-2" />
+                            </div>
+                            <div class="flex space-x-4">
+                                <button type="submit"
+                                    class="bg-green-500 text-white font-bold py-2 px-4 rounded-full hover:bg-green-600 transition-colors">Cadastrar
+                                    Peça</button>
+                                <button type="button" id="closeModalButton"
+                                    class="bg-gray-500 text-white font-bold py-2 px-4 rounded-full hover:bg-gray-600 transition-colors">Cancelar</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
+                <!-- Navigation Buttons -->
+                <div class="flex justify-center space-x-6 mb-8">
+                    <button id="myItemsButton"
+                        class="bg-green-500 text-white font-bold py-3 px-8 rounded-full text-lg shadow-lg hover:bg-green-600 transition-transform transform hover:scale-105">
+                        Minhas Peças
                     </button>
-                    <div id="addPieceModal" class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 hidden" style="z-index: 50;">
-                        <div class="bg-white p-6 rounded-lg shadow-lg w-96" style="z-index: 60;">
-                            <h2 class="text-xl font-bold mb-4">Adicionar Nova Peça</h2>
-                            <form id="addPieceForm">
-                                <div class="mb-4">
-                                    <label for="titulo" class="block text-sm font-medium text-gray-700">Título</label>
-                                    <input type="text" id="titulo" name="titulo" required class="mt-1 block w-full border border-gray-300 rounded-md p-2" />
-                                </div>
-                                <div class="mb-4">
-                                    <label for="descricao" class="block text-sm font-medium text-gray-700">Descrição</label>
-                                    <textarea id="descricao" name="descricao" required class="mt-1 block w-full border border-gray-300 rounded-md p-2"></textarea>
-                                </div>
-                                <div class="mb-4">
-                                    <label for="categoria" class="block text-sm font-medium text-gray-700">Categoria</label>
-                                    <select id="categoria" name="categoria" required class="mt-1 block w-full border border-gray-300 rounded-md p-2">
-                                        <option value="">Selecione uma categoria</option>
-                                        <option value="Feminino">Feminino</option>
-                                        <option value="Masculino">Masculino</option>
-                                        <option value="Infantil">Infantil</option>
-                                    </select>
-                                </div>
-                                <div class="mb-4">
-                                    <label for="tipo" class="block text-sm font-medium text-gray-700">Tipo</label>
-                                    <div>
-                                        <input type="radio" id="venda" name="tipo" value="Venda" required />
-                                        <label for="venda">Venda</label>
-                                        <input type="radio" id="troca" name="tipo" value="Troca" required />
-                                        <label for="troca">Troca</label>
-                                    </div>
-                                </div>
-                                <div class="mb-4" id="precoContainer" style="display: none;">
-                                    <label for="preco" class="block text-sm font-medium text-gray-700">Preço</label>
-                                    <input type="number" id="preco" name="preco" class="mt-1 block w-full border border-gray-300 rounded-md p-2" />
-                                </div>
-                                <div class="mb-4" id="preferenciaContainer" style="display: none;">
-                                    <label for="preferencia" class="block text-sm font-medium text-gray-700">Preferência de Troca</label>
-                                    <input type="text" id="preferencia" name="preferencia" class="mt-1 block w-full border border-gray-300 rounded-md p-2" />
-                                </div>
-                                <div class="mb-4">
-                                    <label for="imagem" class="block text-sm font-medium text-gray-700">Imagem</label>
-                                    <input type="file" id="imagem" name="imagem" accept="image/*" required class="mt-1 block w-full border border-gray-300 rounded-md p-2" />
-                                </div>
-                                <button type="submit" class="bg-green-500 text-white font-bold py-2 px-4 rounded-full hover:bg-green-600 transition-colors">Cadastrar Peça</button>
-                                <button type="button" id="closeModalButton" class="mt-2 text-gray-500 hover:text-gray-700">Cancelar</button>
-                            </form>
-                        </div>
+                    <button id="negotiationsButton"
+                        class="bg-green-500 text-white font-bold py-3 px-8 rounded-full text-lg shadow-lg hover:bg-green-600 transition-transform transform hover:scale-105">
+                        Minhas Negociações
+                    </button>
+                </div>
+
+                <!-- My Items Section -->
+                <div id="myItemsSection" class="mb-8">
+                    <div id="myItemsGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    </div>
+                </div>
+
+                <!-- Negotiations Section -->
+                <div id="negotiationsSection" class="mb-8 hidden">
+                    <div id="negotiationsList" class="space-y-4">
                     </div>
                 </div>
             </div>
-
-            <div class="flex justify-center space-x-4 mb-8">
-                <button id="myItemsButton" class="bg-green-500 text-white font-bold py-2 px-6 rounded-full shadow-lg hover:bg-green-600 transition-colors">
-                    Minhas Peças
-                </button>
-                <button id="negotiationsButton" class="bg-gray-800 text-white font-bold py-2 px-6 rounded-full shadow-lg hover:bg-gray-700 transition-colors">
-                    Minhas Negociações
-                </button>
-            </div>
-
-            <div id="myItemsSection" class="mb-8">
-                <div id="myItemsGrid" class="flex flex-wrap justify-center gap-6">
-                    </div>
-            </div>
-
-            <div id="negotiationsSection" class="mb-8 hidden">
-                <div id="negotiationsList" class="space-y-4">
-                    </div>
-            </div>
-        </div>
+        </section>
     </main>
     <script>
         document.addEventListener('DOMContentLoaded', () => {
@@ -186,7 +267,7 @@
             const addPieceModal = document.getElementById('addPieceModal');
             const closeModalButton = document.getElementById('closeModalButton');
             const addPieceForm = document.getElementById('addPieceForm');
-            
+
             // Novos botões de alternância
             const myItemsButton = document.getElementById('myItemsButton');
             const negotiationsButton = document.getElementById('negotiationsButton');
@@ -205,11 +286,11 @@
                 try {
                     const response = await fetch('/status');
                     const data = await response.json();
-                    
+
                     if (data.loggedIn && data.user) {
                         userName.textContent = data.user.nome;
                         userEmail.textContent = data.user.email;
-                        
+
                         // Se o usuário tiver foto de perfil, atualizar a imagem
                         if (data.user.fotoPerfil) {
                             profileImage.src = data.user.fotoPerfil;
@@ -223,7 +304,7 @@
                     window.location.href = 'login.html';
                 }
             };
-            
+
             // Função para fazer upload da foto de perfil
             const uploadProfilePhoto = async (file) => {
                 try {
@@ -236,7 +317,7 @@
                     });
 
                     const result = await response.json();
-                    
+
                     if (result.success) {
                         // Atualizar a imagem com a nova foto
                         profileImage.src = result.fotoPerfil;
@@ -280,20 +361,33 @@
                 try {
                     const response = await fetch('/pecas-usuario');
                     const userItems = await response.json();
-                    
+
                     myItemsGrid.innerHTML = '';
-                    
+
                     if (userItems.length === 0) {
                         myItemsGrid.innerHTML = '<p class="text-center text-secondary col-span-full">Você ainda não cadastrou nenhuma peça.</p>';
                         return;
                     }
-                    
+
                     userItems.forEach(item => {
                         const itemCard = document.createElement('div');
-                        itemCard.className = 'item-card p-4 text-center rounded-lg border border-gray-300';
+                        itemCard.className = 'item-card p-4 text-center';
                         itemCard.innerHTML = `
-                            <img src="${item.imagem || 'https://via.placeholder.com/300'}" alt="${item.titulo}" class="w-full h-48 object-cover mb-4 rounded-lg">
-                            <h4 class="text-lg font-bold text-primary mb-1">${item.titulo}</h4>
+                            <img src="${item.imagem || '../image/logo.png'}" alt="${item.titulo}" class="w-full h-48 object-cover mb-4 rounded-lg">
+                            <h4 class="text-lg font-bold text-primary mb-2">${item.titulo}</h4>
+                            <div class="text-sm text-secondary mb-2">
+                                <span class="font-semibold">Tipo:</span> ${item.tipo}
+                            </div>
+                            ${item.tipo === 'Venda' ? `
+                                <div class="text-green-600 font-bold text-lg mb-2">
+                                    R$ ${parseFloat(item.preco).toFixed(2)}
+                                </div>
+                            ` : item.tipo === 'Troca' ? `
+                                <div class="text-blue-600 font-semibold text-sm mb-2">
+                                    Troca por: ${item.preferencia || 'Qualquer item'}
+                                </div>
+                            ` : ''}
+                            <p class="text-xs text-secondary">${item.descricao.substring(0, 100)}${item.descricao.length > 100 ? '...' : ''}</p>
                         `;
                         myItemsGrid.appendChild(itemCard);
                     });
@@ -313,7 +407,7 @@
                     const negotiationsData = await response.json();
 
                     negotiationsList.innerHTML = '';
-                    
+
                     if (negotiationsData.length === 0) {
                         negotiationsList.innerHTML = '<p class="text-center text-secondary">Você não tem negociações ativas no momento.</p>';
                     } else {
@@ -321,7 +415,7 @@
                             const negCard = document.createElement('div');
                             negCard.className = 'bg-card-bg p-4 rounded-lg shadow-sm border border-theme flex items-center space-x-4';
                             negCard.innerHTML = `
-                                <img src="${negociacao.imagemPeca || 'https://via.placeholder.com/100'}" alt="Imagem da peça" class="w-16 h-16 object-cover rounded-md">
+                                <img src="${negociacao.imagemPeca || '../image/logo.png'}" alt="Imagem da peça" class="w-16 h-16 object-cover rounded-md">
                                 <div>
                                     <h4 class="text-lg font-semibold text-primary">${negociacao.tituloPeca}</h4>
                                     <p class="text-sm text-secondary">Status: <span class="font-bold">${negociacao.status}</span></p>
@@ -336,7 +430,7 @@
                     negotiationsList.innerHTML = '<p class="text-center text-red-500">Erro ao carregar negociações.</p>';
                 }
             };
-            
+
             // Event listeners para o modal de adicionar peça
             addPieceButton.addEventListener('click', () => {
                 addPieceModal.classList.remove('hidden');
@@ -352,20 +446,20 @@
                 myItemsSection.classList.remove('hidden');
                 negotiationsSection.classList.add('hidden');
                 renderUserItems(); // Opcional: recarrega a lista de peças
-                myItemsButton.classList.remove('bg-gray-800', 'text-white');
-                myItemsButton.classList.add('bg-green-500', 'text-white');
-                negotiationsButton.classList.add('bg-gray-800', 'text-white');
-                negotiationsButton.classList.remove('bg-green-500', 'text-white');
+                myItemsButton.classList.add('bg-green-600');
+                myItemsButton.classList.remove('bg-green-500');
+                negotiationsButton.classList.add('bg-green-500');
+                negotiationsButton.classList.remove('bg-green-600');
             });
 
             negotiationsButton.addEventListener('click', () => {
                 myItemsSection.classList.add('hidden');
                 negotiationsSection.classList.remove('hidden');
                 fetchAndRenderNegotiations();
-                negotiationsButton.classList.remove('bg-gray-800', 'text-white');
-                negotiationsButton.classList.add('bg-green-500', 'text-white');
-                myItemsButton.classList.add('bg-gray-800', 'text-white');
-                myItemsButton.classList.remove('bg-green-500', 'text-white');
+                negotiationsButton.classList.add('bg-green-600');
+                negotiationsButton.classList.remove('bg-green-500');
+                myItemsButton.classList.add('bg-green-500');
+                myItemsButton.classList.remove('bg-green-600');
             });
 
             // Função para mostrar/ocultar campos dinâmicos
@@ -410,7 +504,7 @@
 
             addPieceForm.addEventListener('submit', async (event) => {
                 event.preventDefault();
-                
+
                 // Validação adicional
                 const tipoVenda = document.getElementById('venda').checked;
                 const tipoTroca = document.getElementById('troca').checked;
@@ -433,13 +527,13 @@
                 }
 
                 const formData = new FormData(addPieceForm);
-                
+
                 try {
                     const response = await fetch('/adicionar-peca', {
                         method: 'POST',
                         body: formData
                     });
-                    
+
                     if (response.ok) {
                         alert('Peça cadastrada com sucesso!');
                         addPieceModal.classList.add('hidden');
@@ -460,22 +554,30 @@
                 try {
                     const response = await fetch('/status');
                     const data = await response.json();
-                    
+
                     if (data.loggedIn) {
-                        loggedInButtons.classList.remove('hidden');
-                        loggedInButtons.classList.add('flex');
-                        loggedOutButtons.classList.add('hidden');
+                        if (loggedInButtons) {
+                            loggedInButtons.classList.remove('hidden');
+                            loggedInButtons.classList.add('flex');
+                        }
+                        if (loggedOutButtons) {
+                            loggedOutButtons.classList.add('hidden');
+                        }
                         updateNotificationsCount(data.negociacoesPendentes);
                     } else {
-                        loggedOutButtons.classList.remove('hidden');
-                        loggedOutButtons.classList.add('flex');
-                        loggedInButtons.classList.add('hidden');
+                        if (loggedOutButtons) {
+                            loggedOutButtons.classList.remove('hidden');
+                            loggedOutButtons.classList.add('flex');
+                        }
+                        if (loggedInButtons) {
+                            loggedInButtons.classList.add('hidden');
+                        }
                     }
                 } catch (error) {
                     console.error('Erro ao verificar status de login:', error);
                 }
             };
-            
+
             // Função para atualizar o contador de notificações no botão
             const updateNotificationsCount = (count) => {
                 if (count > 0) {
@@ -510,4 +612,5 @@
         });
     </script>
 </body>
+
 </html>

@@ -7,9 +7,9 @@ const port = 3001; // Usar porta diferente para não conflitar
 const usuarios = [];
 const pecas = [];
 const pecasDeExemplo = [
-    { id: 'ex-1', titulo: "Camiseta Branca", descricao: "Perfeita para o dia a dia, em bom estado.", tipo: "Troca", categoria: "Masculino", imagem: "https://placehold.co/400x400/FFF/000?text=Camiseta+Branca" },
-    { id: 'ex-2', titulo: "Camiseta Preta", descricao: "Pouco usada, ideal para qualquer ocasião.", tipo: "Troca", categoria: "Masculino", imagem: "https://placehold.co/400x400/000/FFF?text=Camiseta+Preta" },
-    { id: 'ex-3', titulo: "Calça Jeans", descricao: "Calça de marca, em excelente estado.", tipo: "Troca", categoria: "Feminino", imagem: "https://placehold.co/400x400/6B7280/FFF?text=Calça+Jeans" }
+    { id: 'ex-1', titulo: "Camiseta Branca", descricao: "Perfeita para o dia a dia, em bom estado.", tipo: "Troca", categoria: "Masculino", imagem: "../image/logo.png" },
+    { id: 'ex-2', titulo: "Camiseta Preta", descricao: "Pouco usada, ideal para qualquer ocasião.", tipo: "Troca", categoria: "Masculino", imagem: "../image/logo.png" },
+    { id: 'ex-3', titulo: "Calça Jeans", descricao: "Calça de marca, em excelente estado.", tipo: "Troca", categoria: "Feminino", imagem: "../image/logo.png" }
 ];
 
 // Adicionar alguns dados de teste

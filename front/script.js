@@ -11,15 +11,15 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Peças de exemplo para exibir se a loja estiver vazia
     const defaultPecas = [
-        { id: 'ex-1', titulo: "Camiseta Branca", descricao: "Perfeita para o dia a dia, em bom estado.", tipo: "Troca", categoria: "Masculino", imagem: "https://placehold.co/400x400/FFF/000?text=Camiseta+Branca" },
-        { id: 'ex-2', titulo: "Camiseta Preta", descricao: "Pouco usada, ideal para qualquer ocasião.", tipo: "Troca", categoria: "Masculino", imagem: "https://placehold.co/400x400/000/FFF?text=Camiseta+Preta" },
-        { id: 'ex-3', titulo: "Calça Jeans", descricao: "Calça de marca, em excelente estado.", tipo: "Troca", categoria: "Feminino", imagem: "https://placehold.co/400x400/6B7280/FFF?text=Calça+Jeans" },
-        { id: 'ex-4', titulo: "Jaqueta de Couro", descricao: "Jaqueta vintage de alta qualidade.", tipo: "Venda", preco: 189.90, categoria: "Masculino", imagem: "https://placehold.co/400x400/292524/E5E7EB?text=Jaqueta+de+Couro" },
-        { id: 'ex-5', titulo: "Vestido Floral", descricao: "Vestido leve, com estampa vibrante.", tipo: "Troca", categoria: "Feminino", imagem: "https://placehold.co/400x400/FCA5A5/FFF?text=Vestido+Floral" },
-        { id: 'ex-6', titulo: "Blusa de Frio", descricao: "Blusa de lã para crianças, muito quentinha.", tipo: "Troca", categoria: "Infantil", imagem: "https://placehold.co/400x400/FDBA74/FFF?text=Blusa+de+Frio" },
-        { id: 'ex-7', titulo: "Tênis Casual", descricao: "Tênis esportivo, poucas marcas de uso.", tipo: "Venda", preco: 120.00, categoria: "Masculino", imagem: "https://placehold.co/400x400/9CA3AF/FFF?text=Tênis+Casual" },
-        { id: 'ex-8', titulo: "Saia Plissada", descricao: "Saia elegante, perfeita para eventos.", tipo: "Troca", categoria: "Feminino", imagem: "https://placehold.co/400x400/F472B6/FFF?text=Saia+Plissada" },
-        { id: 'ex-9', titulo: "Shorts Infantil", descricao: "Shorts de algodão, confortável para brincar.", tipo: "Troca", categoria: "Infantil", imagem: "https://placehold.co/400x400/34D399/FFF?text=Shorts+Infantil" }
+        { id: 'ex-1', titulo: "Camiseta Branca", descricao: "Perfeita para o dia a dia, em bom estado.", tipo: "Troca", categoria: "Masculino", imagem: "../image/logo.png" },
+        { id: 'ex-2', titulo: "Camiseta Preta", descricao: "Pouco usada, ideal para qualquer ocasião.", tipo: "Troca", categoria: "Masculino", imagem: "../image/logo.png" },
+        { id: 'ex-3', titulo: "Calça Jeans", descricao: "Calça de marca, em excelente estado.", tipo: "Troca", categoria: "Feminino", imagem: "../image/logo.png" },
+        { id: 'ex-4', titulo: "Jaqueta de Couro", descricao: "Jaqueta vintage de alta qualidade.", tipo: "Venda", preco: 189.90, categoria: "Masculino", imagem: "../image/logo.png" },
+        { id: 'ex-5', titulo: "Vestido Floral", descricao: "Vestido leve, com estampa vibrante.", tipo: "Troca", categoria: "Feminino", imagem: "../image/logo.png" },
+        { id: 'ex-6', titulo: "Blusa de Frio", descricao: "Blusa de lã para crianças, muito quentinha.", tipo: "Troca", categoria: "Infantil", imagem: "../image/logo.png" },
+        { id: 'ex-7', titulo: "Tênis Casual", descricao: "Tênis esportivo, poucas marcas de uso.", tipo: "Venda", preco: 120.00, categoria: "Masculino", imagem: "../image/logo.png" },
+        { id: 'ex-8', titulo: "Saia Plissada", descricao: "Saia elegante, perfeita para eventos.", tipo: "Troca", categoria: "Feminino", imagem: "../image/logo.png" },
+        { id: 'ex-9', titulo: "Shorts Infantil", descricao: "Shorts de algodão, confortável para brincar.", tipo: "Troca", categoria: "Infantil", imagem: "../image/logo.png" }
     ];
 
     menuToggle.addEventListener('click', () => {
@@ -65,7 +65,7 @@ document.addEventListener('DOMContentLoaded', () => {
             card.className = 'peca-card relative p-4';
             
             const precoDisplay = peca.tipo === 'Venda' ? `R$ ${peca.preco.toFixed(2).replace('.', ',')}` : 'Troca';
-            const actionButtonText = peca.tipo === 'Venda' ? 'Comprar' : 'Negociar';
+const actionButtonText = peca.tipo === 'Venda' ? 'Comprar' : 'Propor Troca';
             
             card.innerHTML = `
                 <img src="${peca.imagem}" alt="${peca.titulo}" class="w-full h-48 object-cover rounded-lg mb-4">
@@ -83,33 +83,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // Adiciona o event listener para os botões de ação
         document.querySelectorAll('.action-button').forEach(button => {
-                button.addEventListener('click', async (event) => {
-                    const pecaId = event.target.getAttribute('data-peca-id');
-                    const action = event.target.getAttribute('data-action');
-                    
-                    if (action === 'negociar') {
-                        // Envia a proposta de negociação para a rota /negociar
-                        const response = await fetch(`/negociar/${pecaId}`, {
-                            method: 'POST',
-                            headers: {
-                                'Content-Type': 'application/json'
-                            },
-                            body: JSON.stringify({ idPeca: pecaId })
-                        });
-                        const message = await response.text();
-                        alert(message);
-                    } else {
-                        const response = await fetch(`/${action}`, { 
-                            method: 'POST',
-                            headers: {
-                                'Content-Type': 'application/json'
-                            },
-                            body: JSON.stringify({ idPeca: pecaId })
-                        });
-                        const message = await response.text();
-                        alert(message);
-                    }
-                });
+            button.addEventListener('click', async (event) => {
+                const pecaId = event.target.getAttribute('data-peca-id');
+                // Redireciona para a página de produtos com o ID da peça
+                window.location.href = `produtos.html?id=${pecaId}`;
+            });
         });
     };
 

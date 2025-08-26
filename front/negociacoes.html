@@ -12,7 +12,7 @@
 </head>
 <body class="flex flex-col min-h-screen">
   
-  <header class="shadow-md p-4 flex justify-between items-center sticky top-0 z-50 w-full bg-primary border-b border-theme">
+    <header class="shadow-md p-4 flex justify-between items-center sticky top-0 z-50 w-full bg-primary border-b border-theme">
     <div class="flex items-center space-x-4">
       <button onclick="window.history.back()" class="text-secondary text-2xl hover:text-primary">
         <i class="fas fa-arrow-left"></i>
@@ -25,6 +25,9 @@
       <a href="loja.html" class="bg-green-500 text-white font-bold py-2 px-4 rounded-full shadow-lg hover:bg-green-600 transition-colors">
         Voltar para Loja
       </a>
+      <button id="logoutButton" class="bg-gray-800 text-white font-bold py-2 px-4 rounded-full shadow-lg hover:bg-gray-700 transition-colors">
+        Sair
+      </button>
     </div>
   </header>
 
@@ -65,27 +68,10 @@
     </div>
   </main>
 
-  <script>
-    let todasNegociacoes = [];
-    let filtroAtual = 'todas';
+    <script>
+        let todasNegociacoes = [];
+        let filtroAtual = 'todas';
 
-    // Verificar status de login
-    const verificarLogin = async () => {
-      try {
-        const response = await fetch('/status');
-        const data = await response.json();
-        
-        if (!data.loggedIn) {
-          window.location.href = 'login.html';
-          return false;
-        }
-        return true;
-      } catch (error) {
-        console.error('Erro ao verificar login:', error);
-        window.location.href = 'login.html';
-        return false;
-      }
-    };
 
     // Carregar negociações
     const carregarNegociacoes = async () => {
@@ -269,6 +255,17 @@
       document.getElementById('filterTodas').classList.remove('bg-gray-300', 'text-gray-700');
       document.getElementById('filterTodas').classList.add('bg-green-500', 'text-white');
     };
+
+    // Lógica de logout
+    const logoutButton = document.getElementById('logoutButton');
+    logoutButton.addEventListener('click', async () => {
+        try {
+            await fetch('/logout', { method: 'POST' });
+            window.location.href = 'login.html';
+        } catch (error) {
+            console.error('Erro ao fazer logout:', error);
+        }
+    });
 
     // Inicializar
     document.addEventListener('DOMContentLoaded', () => {

@@ -70,7 +70,7 @@ async function testTrade() {
             pecaOfertada: 2 // This should be the ID of the item we just created
         });
 
-        const tradeResponse = await fetch('http://localhost:3000/propor-troca/1', {
+        const tradeResponse = await fetch('http://localhost:3000/troca/1', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
