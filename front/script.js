@@ -83,16 +83,33 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // Adiciona o event listener para os botões de ação
         document.querySelectorAll('.action-button').forEach(button => {
-            button.addEventListener('click', async (event) => {
-                const pecaId = event.target.getAttribute('data-peca-id');
-                const action = event.target.getAttribute('data-action');
-
-                const response = await fetch(`/${action}/${pecaId}`, {
-                    method: 'POST'
+                button.addEventListener('click', async (event) => {
+                    const pecaId = event.target.getAttribute('data-peca-id');
+                    const action = event.target.getAttribute('data-action');
+                    
+                    if (action === 'negociar') {
+                        // Envia a proposta de negociação para a rota /negociar
+                        const response = await fetch(`/negociar/${pecaId}`, {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json'
+                            },
+                            body: JSON.stringify({ idPeca: pecaId })
+                        });
+                        const message = await response.text();
+                        alert(message);
+                    } else {
+                        const response = await fetch(`/${action}`, { 
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json'
+                            },
+                            body: JSON.stringify({ idPeca: pecaId })
+                        });
+                        const message = await response.text();
+                        alert(message);
+                    }
                 });
-                const message = await response.text();
-                alert(message);
-            });
         });
     };
 
@@ -131,6 +148,41 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
+    // Função para atualizar notificações
+    const atualizarNotificacoes = async () => {
+        try {
+            const response = await fetch('/notificacoes/contagem');
+            if (response.ok) {
+                const data = await response.json();
+                const badge = document.getElementById('notificationBadge');
+                
+                if (data.contagem > 0) {
+                    badge.classList.remove('hidden');
+                    badge.textContent = data.contagem;
+                } else {
+                    badge.classList.add('hidden');
+                }
+            }
+        } catch (error) {
+            console.error('Erro ao atualizar notificações:', error);
+        }
+    };
+
+    // Configurar botão de notificações
+    const configurarBotaoNotificacoes = () => {
+        const negotiationsButton = document.getElementById('negotiationsButton');
+        if (negotiationsButton) {
+            negotiationsButton.addEventListener('click', () => {
+                window.location.href = 'negociacoes.html';
+            });
+        }
+    };
+
     checkLoginStatus();
     loadAllPecas();
+    configurarBotaoNotificacoes();
+    
+    // Atualizar notificações inicialmente e a cada 30 segundos
+    atualizarNotificacoes();
+    setInterval(atualizarNotificacoes, 30000);
 });

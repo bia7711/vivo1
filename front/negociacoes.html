@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Minhas Negociações | ReUse Jovem</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+  <link rel="stylesheet" href="styles.css">
+  <link rel="icon" type="image/png" href="../image/logo.png">
+  <script src="theme.js" defer></script>
+</head>
+<body class="flex flex-col min-h-screen">
+  
+  <header class="shadow-md p-4 flex justify-between items-center sticky top-0 z-50 w-full bg-primary border-b border-theme">
+    <div class="flex items-center space-x-4">
+      <button onclick="window.history.back()" class="text-secondary text-2xl hover:text-primary">
+        <i class="fas fa-arrow-left"></i>
+      </button>
+      <h1 class="text-xl font-extrabold text-primary">Minhas Negociações</h1>
+    </div>
+    
+    <div class="flex items-center space-x-4 ml-auto">
+      <button id="themeToggle" class="theme-toggle" aria-label="Alternar modo escuro"></button>
+      <a href="loja.html" class="bg-green-500 text-white font-bold py-2 px-4 rounded-full shadow-lg hover:bg-green-600 transition-colors">
+        Voltar para Loja
+      </a>
+    </div>
+  </header>
+
+  <main class="flex-grow p-6">
+    <div class="max-w-4xl mx-auto">
+      <h2 class="text-3xl font-bold text-center mb-8" style="color: #22c55e;">Propostas de Troca</h2>
+      
+      <!-- Filtros -->
+      <div class="flex justify-center space-x-4 mb-8">
+        <button id="filterTodas" class="filter-btn bg-green-500 text-white font-semibold py-2 px-6 rounded-full transition-colors" data-status="todas">
+          Todas
+        </button>
+        <button id="filterPendentes" class="filter-btn bg-yellow-500 text-white font-semibold py-2 px-6 rounded-full transition-colors" data-status="pendente">
+          Pendentes
+        </button>
+        <button id="filterAceitas" class="filter-btn bg-blue-500 text-white font-semibold py-2 px-6 rounded-full transition-colors" data-status="aceita">
+          Aceitas
+        </button>
+        <button id="filterRecusadas" class="filter-btn bg-red-500 text-white font-semibold py-2 px-6 rounded-full transition-colors" data-status="recusada">
+          Recusadas
+        </button>
+      </div>
+
+      <!-- Container das negociações -->
+      <div id="negociacoesContainer" class="space-y-6">
+        <div class="text-center text-secondary py-8">
+          <i class="fas fa-exchange-alt text-4xl mb-4"></i>
+          <p>Carregando suas negociações...</p>
+        </div>
+      </div>
+
+      <!-- Mensagem quando não há negociações -->
+      <div id="semNegociacoes" class="text-center text-secondary py-12 hidden">
+        <i class="fas fa-inbox text-6xl mb-4"></i>
+        <h3 class="text-xl font-semibold mb-2">Nenhuma negociação encontrada</h3>
+        <p>Você ainda não possui propostas de troca.</p>
+      </div>
+    </div>
+  </main>
+
+  <script>
+    let todasNegociacoes = [];
+    let filtroAtual = 'todas';
+
+    // Verificar status de login
+    const verificarLogin = async () => {
+      try {
+        const response = await fetch('/status');
+        const data = await response.json();
+        
+        if (!data.loggedIn) {
+          window.location.href = 'login.html';
+          return false;
+        }
+        return true;
+      } catch (error) {
+        console.error('Erro ao verificar login:', error);
+        window.location.href = 'login.html';
+        return false;
+      }
+    };
+
+    // Carregar negociações
+    const carregarNegociacoes = async () => {
+      const estaLogado = await verificarLogin();
+      if (!estaLogado) return;
+
+      try {
+        const response = await fetch('/negociacoes-detalhadas');
+        if (!response.ok) {
+          throw new Error('Erro ao carregar negociações');
+        }
+
+        todasNegociacoes = await response.json();
+        aplicarFiltro();
+        
+      } catch (error) {
+        console.error('Erro ao carregar negociações:', error);
+        document.getElementById('negociacoesContainer').innerHTML = `
+          <div class="text-center text-red-500 py-8">
+            <i class="fas fa-exclamation-triangle text-4xl mb-4"></i>
+            <p>Erro ao carregar negociações. Tente novamente.</p>
+          </div>
+        `;
+      }
+    };
+
+    // Aplicar filtro
+    const aplicarFiltro = () => {
+      const negociacoesFiltradas = filtroAtual === 'todas' 
+        ? todasNegociacoes 
+        : todasNegociacoes.filter(n => n.status === filtroAtual);
+
+      renderizarNegociacoes(negociacoesFiltradas);
+    };
+
+    // Renderizar negociações
+    const renderizarNegociacoes = (negociacoes) => {
+      const container = document.getElementById('negociacoesContainer');
+      
+      if (negociacoes.length === 0) {
+        document.getElementById('semNegociacoes').classList.remove('hidden');
+        container.innerHTML = '';
+        return;
+      }
+
+      document.getElementById('semNegociacoes').classList.add('hidden');
+      
+      container.innerHTML = negociacoes.map(negociacao => `
+        <div class="bg-white shadow-lg rounded-2xl p-6 border-l-4 ${
+          negociacao.status === 'pendente' ? 'border-yellow-500' :
+          negociacao.status === 'aceita' ? 'border-green-500' :
+          'border-red-500'
+        }">
+          <!-- Header com status -->
+          <div class="flex justify-between items-center mb-4">
+            <span class="px-3 py-1 rounded-full text-sm font-semibold ${
+              negociacao.status === 'pendente' ? 'bg-yellow-100 text-yellow-800' :
+              negociacao.status === 'aceita' ? 'bg-green-100 text-green-800' :
+              'bg-red-100 text-red-800'
+            }">
+              ${negociacao.status.charAt(0).toUpperCase() + negociacao.status.slice(1)}
+            </span>
+            <span class="text-sm text-gray-500">
+              ${new Date(negociacao.dataProposta).toLocaleDateString('pt-BR')}
+            </span>
+          </div>
+
+          <!-- Informações da troca -->
+          <div class="grid md:grid-cols-2 gap-6 mb-6">
+            <!-- Peça ofertada (do usuário origem) -->
+            <div>
+              <h3 class="font-semibold text-gray-800 mb-2">Peça Ofertada</h3>
+              ${negociacao.pecaOrigem ? `
+                <div class="flex items-center space-x-3">
+                  ${negociacao.pecaOrigem.imagem ? `
+                    <img src="${negociacao.pecaOrigem.imagem}" alt="${negociacao.pecaOrigem.titulo}" class="w-16 h-16 object-cover rounded-lg">
+                  ` : ''}
+                  <div>
+                    <p class="font-medium">${negociacao.pecaOrigem.titulo}</p>
+                    <p class="text-sm text-gray-600">Por: ${negociacao.usuarioOrigem?.nome || 'Usuário'}</p>
+                  </div>
+                </div>
+              ` : '<p class="text-gray-500">Peça não disponível</p>'}
+            </div>
+
+            <!-- Peça desejada (da loja) -->
+            <div>
+              <h3 class="font-semibold text-gray-800 mb-2">Peça Desejada</h3>
+              ${negociacao.pecaDestino ? `
+                <div class="flex items-center space-x-3">
+                  ${negociacao.pecaDestino.imagem ? `
+                    <img src="${negociacao.pecaDestino.imagem}" alt="${negociacao.pecaDestino.titulo}" class="w-16 h-16 object-cover rounded-lg">
+                  ` : ''}
+                  <div>
+                    <p class="font-medium">${negociacao.pecaDestino.titulo}</p>
+                    <p class="text-sm text-gray-600">De: ${negociacao.usuarioDestino?.nome || 'Usuário'}</p>
+                  </div>
+                </div>
+              ` : '<p class="text-gray-500">Peça não disponível</p>'}
+            </div>
+          </div>
+
+          <!-- Ações -->
+          <div class="flex justify-end space-x-3">
+            ${negociacao.status === 'pendente' && negociacao.usuarioDestino ? `
+              <button onclick="responderProposta(${negociacao.id}, 'aceitar')" class="bg-green-500 hover:bg-green-600 text-white font-semibold py-2 px-4 rounded-lg transition-colors">
+                Aceitar
+              </button>
+              <button onclick="responderProposta(${negociacao.id}, 'recusar')" class="bg-red-500 hover:bg-red-600 text-white font-semibold py-2 px-4 rounded-lg transition-colors">
+                Recusar
+              </button>
+            ` : ''}
+            
+            ${negociacao.status === 'aceita' ? `
+              <a href="https://wa.me/${negociacao.usuarioOrigem?.telefone || negociacao.usuarioDestino?.telefone || ''}?text=Olá! Gostaria de combinar a entrega da troca." 
+                 target="_blank" 
+                 class="bg-green-500 hover:bg-green-600 text-white font-semibold py-2 px-4 rounded-lg transition-colors">
+                <i class="fab fa-whatsapp mr-2"></i>Combinar Entrega
+              </a>
+            ` : ''}
+          </div>
+        </div>
+      `).join('');
+    };
+
+    // Responder a proposta
+    const responderProposta = async (id, acao) => {
+      if (!confirm(`Tem certeza que deseja ${acao === 'aceitar' ? 'aceitar' : 'recusar'} esta proposta?`)) {
+        return;
+      }
+
+      try {
+        const response = await fetch(`/troca/${id}/acao`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ acao })
+        });
+
+        if (response.ok) {
+          alert(`Proposta ${acao === 'aceitar' ? 'aceita' : 'recusada'} com sucesso!`);
+          await carregarNegociacoes(); // Recarregar a lista
+        } else {
+          const errorText = await response.text();
+          alert('Erro: ' + errorText);
+        }
+      } catch (error) {
+        console.error('Erro ao responder proposta:', error);
+        alert('Erro ao responder proposta. Tente novamente.');
+      }
+    };
+
+    // Configurar filtros
+    const configurarFiltros = () => {
+      document.querySelectorAll('.filter-btn').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+          // Remover classe ativa de todos os botões
+          document.querySelectorAll('.filter-btn').forEach(b => {
+            b.classList.remove('bg-green-500', 'bg-yellow-500', 'bg-blue-500', 'bg-red-500');
+            b.classList.add('bg-gray-300', 'text-gray-700');
+          });
+          
+          // Adicionar classe ativa ao botão clicado
+          const status = e.target.getAttribute('data-status');
+          e.target.classList.remove('bg-gray-300', 'text-gray-700');
+          
+          switch(status) {
+            case 'todas': e.target.classList.add('bg-green-500', 'text-white'); break;
+            case 'pendente': e.target.classList.add('bg-yellow-500', 'text-white'); break;
+            case 'aceita': e.target.classList.add('bg-blue-500', 'text-white'); break;
+            case 'recusada': e.target.classList.add('bg-red-500', 'text-white'); break;
+          }
+          
+          filtroAtual = status;
+          aplicarFiltro();
+        });
+      });
+
+      // Inicializar com filtro "todas" ativo
+      document.getElementById('filterTodas').classList.remove('bg-gray-300', 'text-gray-700');
+      document.getElementById('filterTodas').classList.add('bg-green-500', 'text-white');
+    };
+
+    // Inicializar
+    document.addEventListener('DOMContentLoaded', () => {
+      configurarFiltros();
+      carregarNegociacoes();
+      
+      // Atualizar a cada 30 segundos
+      setInterval(carregarNegociacoes, 30000);
+    });
+  </script>
+</body>
+</html>

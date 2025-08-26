@@ -62,7 +62,44 @@ const upload = multer({
 
 // Simula um banco de dados em memória
 const usuarios = [];
-const pecas = [];
+const pecas = [
+  {
+    id: 1,
+    titulo: "Camiseta Teste 1",
+    descricao: "Descrição da camiseta teste 1",
+    categoria: "Masculino",
+    tipo: "Troca",
+    preco: null,
+    preferencia: "Roupas casuais",
+    isPremium: false,
+    idUsuario: 1,
+    imagem: null
+  },
+  {
+    id: 2,
+    titulo: "Calça Jeans Teste",
+    descricao: "Descrição da calça jeans teste",
+    categoria: "Feminino",
+    tipo: "Venda",
+    preco: 89.9,
+    preferencia: null,
+    isPremium: false,
+    idUsuario: 1,
+    imagem: null
+  },
+  {
+    id: 3,
+    titulo: "Vestido Floral",
+    descricao: "Vestido floral para verão",
+    categoria: "Feminino",
+    tipo: "Troca",
+    preco: null,
+    preferencia: "Vestidos",
+    isPremium: false,
+    idUsuario: 2,
+    imagem: null
+  }
+];
 const negociacoes = []; // NOVO ARRAY PARA ARMAZENAR AS NEGOCIAÇÕES
 
 // Peças de exemplo para exibir se a loja estiver vazia
@@ -88,10 +125,21 @@ const verificarAutenticacao = (req, res, next) => {
 
 // Rota de cadastro para criar novo usuário
 app.post('/cadastro', (req, res) => {
-    const { nome, email, senha } = req.body;
+    const { nome, email, senha, telefone } = req.body;
 
-    if (!nome || !email || !senha) {
+    if (!nome || !email || !senha || !telefone) {
         return res.status(400).send('Todos os campos são obrigatórios.');
+    }
+
+    // Validação de senha - mínimo 6 caracteres
+    if (senha.length < 6) {
+        return res.status(400).send('A senha deve ter pelo menos 6 caracteres.');
+    }
+
+    // Validação de telefone - formato básico
+    const telefoneRegex = /^(\+\d{1,3})?[\s-]?\(?\d{2,3}\)?[\s-]?\d{4,5}[\s-]?\d{4}$/;
+    if (!telefoneRegex.test(telefone)) {
+        return res.status(400).send('Telefone inválido. Use o formato: (XX) XXXXX-XXXX');
     }
 
     const usuarioExistente = usuarios.find(u => u.email === email);
@@ -99,11 +147,14 @@ app.post('/cadastro', (req, res) => {
         return res.status(400).send('E-mail já cadastrado.');
     }
 
+    console.log('Attempting to register user:', { nome, email, telefone });
+    
     const novoUsuario = {
         id: usuarios.length + 1,
         nome,
         email,
         senha,
+        telefone,
         dataCriacao: new Date()
     };
 
@@ -137,10 +188,45 @@ app.post('/login', (req, res) => {
     res.status(401).send('E-mail ou senha incorretos.');
 });
 
-// Rota para obter todas as peças (reais e de exemplo)
 app.get('/pecas', (req, res) => {
+    const { id } = req.query; // Obter o ID do produto dos parâmetros de consulta
+    console.log('Buscando peça com ID:', id); // Log para depuração
+    if (id) {
+        // Usar comparação não estrita para lidar com string vs number
+        const peca = pecas.find(p => p.id == id) || pecasDeExemplo.find(p => p.id == id);
+        if (peca) {
+            return res.json(peca); // Return the specific product
+        } else {
+            return res.status(404).send('Produto não encontrado');
+        }
+    }
     const todasAsPecas = [...pecas, ...pecasDeExemplo];
     res.json(todasAsPecas);
+});
+
+// Rota para venda de peça
+app.post('/venda', verificarAutenticacao, (req, res) => {
+    const { idPeca } = req.body;
+    const userId = req.session.userId;
+
+    // Busca a peça real ou de exemplo
+    const peca = pecas.find(p => p.id == idPeca) || pecasDeExemplo.find(p => p.id === idPeca);
+
+    if (!peca) {
+        return res.status(404).send('Peça não encontrada.');
+    }
+
+    if (peca.idUsuario === userId) {
+        return res.status(400).send('Não é possível comprar sua própria peça.');
+    }
+
+    // Para peças de exemplo, não há idUsuario, então não podemos verificar se é do próprio usuário
+    if (peca.idUsuario && peca.idUsuario === userId) {
+        return res.status(400).send('Não é possível comprar sua própria peça.');
+    }
+
+    // Para peças de exemplo, apenas retorna a mensagem de sucesso
+    res.status(200).send(`Compra da peça "${peca.titulo}" concluída!`);
 });
 
 // Rota para verificar status de login e obter informações do usuário
@@ -148,7 +234,7 @@ app.get('/status', (req, res) => {
     if (req.session.userId) {
         const usuario = usuarios.find(u => u.id === req.session.userId);
         const negociacoesPendentes = negociacoes.filter(n => 
-            (n.idUsuarioDono === req.session.userId || n.idUsuarioInteressado === req.session.userId) && 
+            (n.idUsuarioDestino === req.session.userId || n.idUsuarioOrigem === req.session.userId) && 
             n.status === 'pendente'
         ).length;
 
@@ -312,6 +398,186 @@ app.post('/upload-profile-photo', verificarAutenticacao, upload.single('profileP
     res.json({ success: true, fotoPerfil: usuario.fotoPerfil });
 });
 
+// Rota para criar proposta de troca (nova estrutura)
+app.post('/troca', verificarAutenticacao, (req, res) => {
+    const { idPecaOrigem, idPecaDestino } = req.body;
+    const idUsuarioOrigem = req.session.userId;
+
+    // Busca a peça destino (peça da loja)
+    const pecaDestino = pecas.find(p => p.id == idPecaDestino);
+    
+    if (!pecaDestino) {
+        return res.status(404).send('Peça não encontrada.');
+    }
+
+    if (pecaDestino.idUsuario === idUsuarioOrigem) {
+        return res.status(400).send('Não é possível negociar sua própria peça.');
+    }
+
+    // Verifica se a peça origem pertence ao usuário
+    const pecaOrigem = pecas.find(p => p.id == idPecaOrigem && p.idUsuario === idUsuarioOrigem);
+    if (!pecaOrigem) {
+        return res.status(400).send('Peça ofertada não encontrada ou não pertence a você.');
+    }
+
+    // Verifica se já existe uma proposta para esta combinação
+    const propostaExistente = negociacoes.find(n => 
+        n.idUsuarioOrigem === idUsuarioOrigem && 
+        n.idPecaDestino == idPecaDestino &&
+        n.idPecaOrigem == idPecaOrigem &&
+        n.status === 'pendente'
+    );
+
+    if (propostaExistente) {
+        return res.status(400).send('Você já enviou uma proposta para esta troca.');
+    }
+
+    const novaNegociacao = {
+        id: negociacoes.length + 1,
+        idPecaOrigem: parseInt(idPecaOrigem),
+        idPecaDestino: parseInt(idPecaDestino),
+        idUsuarioOrigem: idUsuarioOrigem,
+        idUsuarioDestino: pecaDestino.idUsuario,
+        status: 'pendente',
+        dataProposta: new Date(),
+        dataResposta: null
+    };
+
+    negociacoes.push(novaNegociacao);
+    res.status(200).send('Requisição de troca enviada');
+    console.log(`Nova proposta de troca: ${idUsuarioOrigem} oferece peça ${idPecaOrigem} pela peça ${idPecaDestino} de ${pecaDestino.idUsuario}`);
+});
+
+// Rota para aceitar ou recusar uma proposta de troca
+app.post('/troca/:id/acao', verificarAutenticacao, (req, res) => {
+    const { id } = req.params;
+    const userId = req.session.userId;
+    const { acao } = req.body;
+
+    const negociacao = negociacoes.find(n => n.id == id);
+
+    if (!negociacao) {
+        return res.status(404).send('Negociação não encontrada.');
+    }
+
+    if (negociacao.idUsuarioDestino !== userId) {
+        return res.status(403).send('Você não tem permissão para responder a esta proposta.');
+    }
+
+    negociacao.status = acao === 'aceitar' ? 'aceita' : 'recusada';
+    negociacao.dataResposta = new Date();
+
+    res.status(200).send(`Proposta de troca ${acao === 'aceitar' ? 'aceita' : 'recusada'}.`);
+});
+
+// Rota para aceitar ou recusar uma proposta de troca (mantida para compatibilidade)
+app.post('/responder-troca/:negociacaoId', verificarAutenticacao, (req, res) => {
+    const { negociacaoId } = req.params;
+    const userId = req.session.userId;
+    const { resposta } = req.body;
+
+    const negociacao = negociacoes.find(n => n.id == negociacaoId);
+
+    if (!negociacao) {
+        return res.status(404).send('Negociação não encontrada.');
+    }
+
+    if (negociacao.idUsuarioDestino !== userId) {
+        return res.status(403).send('Você não tem permissão para responder a esta proposta.');
+    }
+
+    negociacao.status = resposta === 'aceitar' ? 'aceita' : 'recusada';
+    negociacao.dataResposta = new Date();
+
+    res.status(200).send(`Proposta de troca ${resposta === 'aceitar' ? 'aceita' : 'recusada'}.`);
+});
+
+// Rota para obter detalhes completos das negociações
+app.get('/negociacoes-detalhadas', verificarAutenticacao, (req, res) => {
+    const userId = req.session.userId;
+    const minhasNegociacoes = negociacoes.filter(n => 
+        n.idUsuarioOrigem === userId || n.idUsuarioDestino === userId
+    );
+
+    const negociacoesDetalhadas = minhasNegociacoes.map(n => {
+        const pecaOrigem = pecas.find(p => p.id === n.idPecaOrigem);
+        const pecaDestino = pecas.find(p => p.id === n.idPecaDestino);
+        const usuarioOrigem = usuarios.find(u => u.id === n.idUsuarioOrigem);
+        const usuarioDestino = usuarios.find(u => u.id === n.idUsuarioDestino);
+
+        return {
+            id: n.id,
+            status: n.status,
+            dataProposta: n.dataProposta,
+            dataResposta: n.dataResposta,
+            pecaOrigem: pecaOrigem ? {
+                id: pecaOrigem.id,
+                titulo: pecaOrigem.titulo,
+                imagem: pecaOrigem.imagem
+            } : null,
+            pecaDestino: pecaDestino ? {
+                id: pecaDestino.id,
+                titulo: pecaDestino.titulo,
+                imagem: pecaDestino.imagem
+            } : null,
+            usuarioOrigem: usuarioOrigem ? {
+                nome: usuarioOrigem.nome,
+                telefone: usuarioOrigem.telefone
+            } : null,
+            usuarioDestino: usuarioDestino ? {
+                nome: usuarioDestino.nome,
+                telefone: usuarioDestino.telefone
+            } : null
+        };
+    });
+
+    res.json(negociacoesDetalhadas);
+});
+
+// Rota para obter notificações pendentes do usuário
+app.get('/notificacoes', verificarAutenticacao, (req, res) => {
+    const userId = req.session.userId;
+    
+    // Notificações são propostas onde o usuário é o dono da peça destino e o status é pendente
+    const notificacoes = negociacoes.filter(n => 
+        n.idUsuarioDestino === userId && n.status === 'pendente'
+    ).map(n => {
+        const pecaOrigem = pecas.find(p => p.id === n.idPecaOrigem);
+        const pecaDestino = pecas.find(p => p.id === n.idPecaDestino);
+        const usuarioOrigem = usuarios.find(u => u.id === n.idUsuarioOrigem);
+
+        return {
+            id: n.id,
+            pecaOrigem: pecaOrigem ? {
+                titulo: pecaOrigem.titulo,
+                imagem: pecaOrigem.imagem
+            } : null,
+            pecaDestino: pecaDestino ? {
+                titulo: pecaDestino.titulo,
+                imagem: pecaDestino.imagem
+            } : null,
+            usuarioOrigem: usuarioOrigem ? {
+                nome: usuarioOrigem.nome,
+                telefone: usuarioOrigem.telefone
+            } : null,
+            dataProposta: n.dataProposta
+        };
+    });
+
+    res.json(notificacoes);
+});
+
+// Rota para obter contagem de notificações pendentes
+app.get('/notificacoes/contagem', verificarAutenticacao, (req, res) => {
+    console.log('Accessed /notificacoes/contagem'); // Debug log
+    const userId = req.session.userId;
+    
+    const contagem = negociacoes.filter(n => 
+        n.idUsuarioDestino === userId && n.status === 'pendente'
+    ).length;
+
+    res.json({ contagem });
+});
 
 app.listen(port, () => {
     console.log(`Servidor rodando em http://localhost:${port}`);

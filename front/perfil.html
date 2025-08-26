@@ -63,10 +63,12 @@
         <div class="flex items-center space-x-4 ml-auto">
             <button id="themeToggle" class="theme-toggle" aria-label="Alternar modo escuro"></button>
             
-            <button id="negotiationsButton" class="relative bg-green-500 text-white rounded-full p-3 shadow-lg hover:bg-green-600 transition-colors">
-                <i class="fas fa-handshake" aria-label="Minhas Trocas"></i>
-                <span id="negotiationsCount" class="absolute top-0 right-0 transform translate-x-1/2 -translate-y-1/2 bg-red-500 text-white text-xs font-bold rounded-full h-5 w-5 flex items-center justify-center hidden">0</span>
+            <!-- Botão de Notificações (sino) -->
+            <button id="notificationsButton" class="relative bg-blue-500 text-white rounded-full p-3 shadow-lg hover:bg-blue-600 transition-colors">
+                <i class="fas fa-bell" aria-label="Notificações"></i>
+                <span id="notificationsCount" class="absolute top-0 right-0 transform translate-x-1/2 -translate-y-1/2 bg-red-500 text-white text-xs font-bold rounded-full h-5 w-5 flex items-center justify-center hidden">0</span>
             </button>
+            
             <a id="profileLink" href="perfil.html" class="text-secondary hover:text-primary transition-colors" aria-label="Perfil">
                 <i class="fas fa-user-circle text-4xl"></i>
             </a>
@@ -188,11 +190,12 @@
             // Novos botões de alternância
             const myItemsButton = document.getElementById('myItemsButton');
             const negotiationsButton = document.getElementById('negotiationsButton');
+            const notificationsButton = document.getElementById('notificationsButton');
 
             const myItemsSection = document.getElementById('myItemsSection');
             const negotiationsSection = document.getElementById('negotiationsSection');
             const negotiationsList = document.getElementById('negotiationsList');
-            const negotiationsCount = document.getElementById('negotiationsCount');
+            const notificationsCount = document.getElementById('notificationsCount');
             const loggedInButtons = document.getElementById('loggedInButtons');
             const loggedOutButtons = document.getElementById('loggedOutButtons');
             const logoutButton = document.getElementById('logoutButton');
@@ -462,7 +465,7 @@
                         loggedInButtons.classList.remove('hidden');
                         loggedInButtons.classList.add('flex');
                         loggedOutButtons.classList.add('hidden');
-                        updateNegotiationsCount(data.negociacoesPendentes);
+                        updateNotificationsCount(data.negociacoesPendentes);
                     } else {
                         loggedOutButtons.classList.remove('hidden');
                         loggedOutButtons.classList.add('flex');
@@ -473,18 +476,22 @@
                 }
             };
             
-            // Função para atualizar o contador de negociações no botão
-            const updateNegotiationsCount = (count) => {
-                const negotiationsButton = document.getElementById('negotiationsButton');
+            // Função para atualizar o contador de notificações no botão
+            const updateNotificationsCount = (count) => {
                 if (count > 0) {
-                    const negotiationsCountSpan = negotiationsButton.querySelector('#negotiationsCount');
-                    negotiationsCountSpan.textContent = count;
-                    negotiationsCountSpan.classList.remove('hidden');
+                    notificationsCount.textContent = count;
+                    notificationsCount.classList.remove('hidden');
                 } else {
-                    const negotiationsCountSpan = negotiationsButton.querySelector('#negotiationsCount');
-                    negotiationsCountSpan.classList.add('hidden');
+                    notificationsCount.classList.add('hidden');
                 }
             };
+
+            // Event listener para o botão de notificações
+            notificationsButton.addEventListener('click', () => {
+                // Aqui você pode implementar a lógica para mostrar notificações
+                // Por exemplo, abrir um modal com as notificações
+                alert('Funcionalidade de notificações será implementada em breve!');
+            });
 
             // Lógica de logout
             logoutButton.addEventListener('click', async () => {
