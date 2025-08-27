@@ -10,17 +10,15 @@ document.addEventListener('DOMContentLoaded', () => {
     let allPecas = [];
 
     // Peças de exemplo para exibir se a loja estiver vazia
-    const defaultPecas = [
-        { id: 'ex-1', titulo: "Camiseta Branca", descricao: "Perfeita para o dia a dia, em bom estado.", tipo: "Troca", categoria: "Masculino", imagem: "../image/logo.png" },
-        { id: 'ex-2', titulo: "Camiseta Preta", descricao: "Pouco usada, ideal para qualquer ocasião.", tipo: "Troca", categoria: "Masculino", imagem: "../image/logo.png" },
-        { id: 'ex-3', titulo: "Calça Jeans", descricao: "Calça de marca, em excelente estado.", tipo: "Troca", categoria: "Feminino", imagem: "../image/logo.png" },
-        { id: 'ex-4', titulo: "Jaqueta de Couro", descricao: "Jaqueta vintage de alta qualidade.", tipo: "Venda", preco: 189.90, categoria: "Masculino", imagem: "../image/logo.png" },
-        { id: 'ex-5', titulo: "Vestido Floral", descricao: "Vestido leve, com estampa vibrante.", tipo: "Troca", categoria: "Feminino", imagem: "../image/logo.png" },
-        { id: 'ex-6', titulo: "Blusa de Frio", descricao: "Blusa de lã para crianças, muito quentinha.", tipo: "Troca", categoria: "Infantil", imagem: "../image/logo.png" },
-        { id: 'ex-7', titulo: "Tênis Casual", descricao: "Tênis esportivo, poucas marcas de uso.", tipo: "Venda", preco: 120.00, categoria: "Masculino", imagem: "../image/logo.png" },
-        { id: 'ex-8', titulo: "Saia Plissada", descricao: "Saia elegante, perfeita para eventos.", tipo: "Troca", categoria: "Feminino", imagem: "../image/logo.png" },
-        { id: 'ex-9', titulo: "Shorts Infantil", descricao: "Shorts de algodão, confortável para brincar.", tipo: "Troca", categoria: "Infantil", imagem: "../image/logo.png" }
-    ];
+    const pecasDeExemplo = [
+    { id: 'ex-1', titulo: "Camiseta Monalisa Preta", descricao: "Pouco usada, ideal para qualquer ocasião.", tipo: "Troca", categoria: "Masculino", imagem: "/image/mona.png" },
+    { id: 'ex-2', titulo: "Calça Jeans", descricao: "Calça de marca, em excelente estado.", tipo: "Troca", categoria: "Feminino", imagem: "/image/calca.jpg" },
+    { id: 'ex-3', titulo: "Jaqueta de Couro", descricao: "Jaqueta vintage de alta qualidade.", tipo: "Venda", preco: 189.90, categoria: "Masculino", imagem: "/image/jaqueta.jpg" },
+    { id: 'ex-4', titulo: "Vestido Floral", descricao: "Vestido leve, com estampa vibrante.", tipo: "Troca", categoria: "Feminino", imagem: "/image/vestido.jpg" },
+    { id: 'ex-5', titulo: "Blusa de Frio", descricao: "Blusa de lã para crianças, muito quentinha.", tipo: "Troca", categoria: "Infantil", imagem: "/image/blusa.jpg" },
+    { id: 'ex-6', titulo: "Tênis Casual", descricao: "Tênis esportivo, poucas marcas de uso.", tipo: "Venda", preco: 120.00, categoria: "Masculino", imagem: "/image/tenis.jpg" },
+    { id: 'ex-7', titulo: "Shorts Infantil", descricao: "Shorts de algodão, confortável para brincar.", tipo: "Troca", categoria: "Infantil", imagem: "/image/shortkids.jpg" }
+];
 
     menuToggle.addEventListener('click', () => {
         menuList.classList.toggle('active');

@@ -9,39 +9,15 @@ let pecas = [];
 const pecasTeste = [
     {
         id: 1,
-        titulo: "Camiseta Teste 1",
-        descricao: "Descrição da camiseta teste 1",
+        titulo: "Moletom Amarelo",
+        descricao: "Moletom confortável e estiloso, perfeito para dias frios.",
         categoria: "Masculino",
         tipo: "Troca",
         preco: null,
-        preferencia: "Roupas casuais",
-        isPremium: false,
-        idUsuario: 1,
-        imagem: null
-    },
-    {
-        id: 2,
-        titulo: "Calça Jeans Teste",
-        descricao: "Descrição da calça jeans teste",
-        categoria: "Feminino",
-        tipo: "Venda",
-        preco: 89.90,
-        preferencia: null,
-        isPremium: false,
-        idUsuario: 1,
-        imagem: null
-    },
-    {
-        id: 3,
-        titulo: "Vestido Floral",
-        descricao: "Vestido floral para verão",
-        categoria: "Feminino",
-        tipo: "Troca",
-        preco: null,
-        preferencia: "Vestidos",
+        preferencia: "Camisetas",
         isPremium: false,
         idUsuario: 2,
-        imagem: null
+        imagem: './image/moletom.jpg'
     }
 ];
 
