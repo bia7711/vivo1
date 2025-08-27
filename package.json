@@ -18,6 +18,7 @@
   },
   "homepage": "https://github.com/bia7711/vivo1#readme",
   "dependencies": {
+    "http-server": "^14.1.1",
     "multer": "^2.0.2",
     "react": "^19.1.1",
     "react-dom": "^19.1.1"

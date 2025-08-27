@@ -1,0 +1,176 @@
+agor<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Exemplo de Integração - Chatbot ReUse</title>
+    <style>
+        /* Estilos básicos para a página de exemplo */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        h1 {
+            color: #22c55e;
+            text-align: center;
+        }
+        
+        .code-block {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 5px;
+            border-left: 4px solid #22c55e;
+            overflow-x: auto;
+            margin: 20px 0;
+        }
+        
+        .btn {
+            background: #22c55e;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 5px;
+        }
+        
+        .btn:hover {
+            background: #16a34a;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🚀 Exemplo de Integração do Chatbot</h1>
+        
+        <p>Este é um exemplo de como integrar o chatbot ReUse Jovem em qualquer projeto.</p>
+        
+        <h2>📋 Como usar:</h2>
+        
+        <div class="code-block">
+            <h3>1. Copie os arquivos para seu projeto:</h3>
+            <pre><code>chatbot.js
+chatbot.css</code></pre>
+        </div>
+        
+        <div class="code-block">
+            <h3>2. Adicione este código no seu HTML:</h3>
+            <pre><code><!-- No <head> -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+<link rel="stylesheet" href="chatbot.css">
+
+<!-- Antes do </body> -->
+<div class="chatbot-container">
+    <button class="chatbot-button" id="chatbotToggle" title="Abrir chatbot de ajuda">
+        <i class="fas fa-comments"></i>
+    </button>
+    
+    <div class="chat-window" id="chatWindow">
+        <div class="chat-header">
+            <h3>Assistente Virtual</h3>
+            <button class="close-button" id="closeChat" title="Fechar chatbot">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+        
+        <div class="chat-messages" id="chatMessages">
+            <div class="message bot-message">
+                Olá! 👋 Como posso ajudar?
+            </div>
+        </div>
+        
+        <div class="quick-replies" id="quickReplies">
+            <button class="quick-reply" data-question="Como funciona?">Como funciona?</button>
+            <button class="quick-reply" data-question="Ajuda">Ajuda</button>
+            <button class="quick-reply" data-question="Contato">Contato</button>
+        </div>
+        
+        <div class="chat-input">
+            <input type="text" id="userInput" placeholder="Digite sua mensagem...">
+            <button id="sendMessage" title="Enviar mensagem">
+                <i class="fas fa-paper-plane"></i>
+            </button>
+        </div>
+    </div>
+</div>
+
+<script src="chatbot.js"></script></code></pre>
+        </div>
+        
+        <h2>🎯 Controle Programático</h2>
+        
+        <div class="code-block">
+            <h3>Funções disponíveis:</h3>
+            <pre><code>// Abrir chatbot
+window.openChatbot();
+
+// Fechar chatbot
+window.closeChatbot();
+
+// Enviar mensagem
+window.sendChatbotMessage("Olá, preciso de ajuda");</code></pre>
+        </div>
+        
+        <div style="text-align: center; margin: 30px 0;">
+            <button class="btn" onclick="window.openChatbot()">Abrir Chatbot</button>
+            <button class="btn" onclick="window.closeChatbot()">Fechar Chatbot</button>
+            <button class="btn" onclick="window.sendChatbotMessage('Como funciona?')">Testar Mensagem</button>
+        </div>
+        
+        <h2>🔧 Personalização</h2>
+        <p>Edite o arquivo <code>chatbot.js</code> para personalizar as respostas no método <code>getResponse()</code>.</p>
+    </div>
+
+    <!-- CHATBOT INTEGRADO -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+    <link rel="stylesheet" href="chatbot.css">
+    
+    <div class="chatbot-container">
+        <button class="chatbot-button" id="chatbotToggle" title="Abrir chatbot de ajuda">
+            <i class="fas fa-comments"></i>
+        </button>
+        
+        <div class="chat-window" id="chatWindow">
+            <div class="chat-header">
+                <h3>Assistente Virtual</h3>
+                <button class="close-button" id="closeChat" title="Fechar chatbot">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            
+            <div class="chat-messages" id="chatMessages">
+                <div class="message bot-message">
+                    Olá! 👋 Como posso ajudar?
+                </div>
+            </div>
+            
+            <div class="quick-replies" id="quickReplies">
+                <button class="quick-reply" data-question="Como funciona?">Como funciona?</button>
+                <button class="quick-reply" data-question="Ajuda">Ajuda</button>
+                <button class="quick-reply" data-question="Contato">Contato</button>
+            </div>
+            
+            <div class="chat-input">
+                <input type="text" id="userInput" placeholder="Digite sua mensagem...">
+                <button id="sendMessage" title="Enviar mensagem">
+                    <i class="fas fa-paper-plane"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script src="chatbot.js"></script>
+</body>
+</html>

@@ -7,8 +7,10 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
     <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="chatbot-package/chatbot.css">
     <link rel="icon" type="image/png" href="../image/logo.png">
     <script src="theme.js" defer></script>
+    <script src="chatbot-package/chatbot.js" defer></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap');
         
@@ -46,6 +48,19 @@
         #menuList.active {
             transform: translateX(0);
         }
+
+        /* Classe para elementos visíveis apenas para leitores de tela */
+        .sr-only {
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            padding: 0;
+            margin: -1px;
+            overflow: hidden;
+            clip: rect(0, 0, 0, 0);
+            white-space: nowrap;
+            border: 0;
+        }
     </style>
 </head>
 <body class="flex flex-col min-h-screen">
@@ -59,7 +74,7 @@
         </div>
         
         <div class="flex items-center space-x-4">
-            <button id="themeToggle" class="theme-toggle" aria-label="Alternar modo escuro"></button>
+            <button id="themeToggle" class="theme-toggle" aria-label="Alternar modo escuro" title="Alternar modo claro/escuro">🌙 Tema</button>
             
             <div id="loggedOutButtons" class="flex items-center space-x-4">
                 <a href="login.html" class="bg-gray-800 text-white font-bold py-2 px-4 rounded-full shadow-lg hover:bg-gray-700 transition-colors">
@@ -158,6 +173,31 @@
             Juntos, podemos fazer a nossa parte.
         </p>
     </footer>
+
+    <!-- Chatbot Container -->
+    <div class="chatbot-container">
+        <button id="chatbotToggle" class="chatbot-button" aria-label="Abrir chatbot" title="Abrir chatbot">
+            <i class="fas fa-comments" aria-hidden="true"></i> 
+            <span class="chatbot-text">Abrir Chatbot</span>
+            <span class="sr-only">Abrir Chatbot</span>
+        </button>
+        <div id="chatWindow" class="chat-window">
+            <div class="chat-header">
+                <h3>Assistente Virtual</h3>
+                <button class="close-button" id="closeChat" aria-label="Fechar chatbot">×</button>
+            </div>
+            <div id="chatMessages" class="chat-messages"></div>
+            <div class="chat-input">
+                <input type="text" id="userInput" placeholder="Digite sua mensagem..." />
+                <button id="sendMessage">Enviar</button>
+            </div>
+            <div id="quickReplies" class="quick-replies">
+                <button class="quick-reply" data-question="Como funciona?">Como funciona?</button>
+                <button class="quick-reply" data-question="Ajuda">Ajuda</button>
+                <button class="quick-reply" data-question="Contato">Contato</button>
+            </div>
+        </div>
+    </div>
 
     <script>
         document.addEventListener('DOMContentLoaded', () => {
