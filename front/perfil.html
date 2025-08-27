@@ -77,12 +77,10 @@
             <button id="themeToggle" class="theme-toggle" aria-label="Alternar modo escuro"></button>
 
             <!-- Botão de Notificações (sino) -->
-            <button id="notificationsButton"
-                class="relative bg-green-500 text-white rounded-full p-3 shadow-lg hover:bg-green-600 transition-colors">
-                <i class="fas fa-bell" aria-label="Notificações"></i>
-                <span id="notificationsCount"
-                    class="absolute top-0 right-0 transform translate-x-1/2 -translate-y-1/2 bg-red-500 text-white text-xs font-bold rounded-full h-5 w-5 flex items-center justify-center hidden">0</span>
-            </button>
+                <button id="negotiationsButton" class="relative bg-green-500 text-white rounded-full p-3 shadow-lg hover:bg-green-600 transition-colors" aria-label="Negociações">
+                    <i class="fas fa-bell" aria-label="Notificações"></i>
+                    <span id="notificationBadge" class="absolute -top-2 -right-2 bg-red-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center hidden">0</span>
+                </button>
 
             <a id="profileLink" href="perfil.html" class="text-secondary hover:text-primary transition-colors"
                 aria-label="Perfil">
@@ -99,6 +97,9 @@
         <ul class="flex flex-col space-y-2 p-4">
             <li><a href="index.html"
                     class="text-secondary hover:text-accent-color font-semibold transition-colors w-full text-left">Home</a>
+            </li>
+            <li><a href="perfil.html"
+                    class="text-secondary hover:text-accent-color font-semibold transition-colors w-full text-left">Perfil</a>
             </li>
             <li><a href="loja.html"
                     class="text-secondary hover:text-accent-color font-semibold transition-colors w-full text-left">Loja</a>
@@ -130,7 +131,7 @@
 
                         <!-- Foto de Perfil -->
                         <div class="relative group cursor-pointer mb-6 md:mb-0">
-                            <img id="profileImage" src="../image/logo.png" alt="Foto de Perfil"
+                            <img id="profileImage" src="../image/null.png" alt="Foto de Perfil"
                                 class="w-32 h-32 md:w-36 md:h-36 rounded-full object-cover border-4 border-green-500 transition-all duration-300 group-hover:opacity-70">
 
                             <div
@@ -233,10 +234,6 @@
                         class="bg-green-500 text-white font-bold py-3 px-8 rounded-full text-lg shadow-lg hover:bg-green-600 transition-transform transform hover:scale-105">
                         Minhas Peças
                     </button>
-                    <button id="negotiationsButton"
-                        class="bg-green-500 text-white font-bold py-3 px-8 rounded-full text-lg shadow-lg hover:bg-green-600 transition-transform transform hover:scale-105">
-                        Minhas Negociações
-                    </button>
                 </div>
 
                 <!-- My Items Section -->
@@ -271,12 +268,10 @@
             // Novos botões de alternância
             const myItemsButton = document.getElementById('myItemsButton');
             const negotiationsButton = document.getElementById('negotiationsButton');
-            const notificationsButton = document.getElementById('notificationsButton');
 
             const myItemsSection = document.getElementById('myItemsSection');
             const negotiationsSection = document.getElementById('negotiationsSection');
             const negotiationsList = document.getElementById('negotiationsList');
-            const notificationsCount = document.getElementById('notificationsCount');
             const loggedInButtons = document.getElementById('loggedInButtons');
             const loggedOutButtons = document.getElementById('loggedOutButtons');
             const logoutButton = document.getElementById('logoutButton');
@@ -452,15 +447,8 @@
                 negotiationsButton.classList.remove('bg-green-600');
             });
 
-            negotiationsButton.addEventListener('click', () => {
-                myItemsSection.classList.add('hidden');
-                negotiationsSection.classList.remove('hidden');
-                fetchAndRenderNegotiations();
-                negotiationsButton.classList.add('bg-green-600');
-                negotiationsButton.classList.remove('bg-green-500');
-                myItemsButton.classList.add('bg-green-500');
-                myItemsButton.classList.remove('bg-green-600');
-            });
+            // negotiationsButton event listener is now handled by configurarBotaoNotificacoes()
+            // which redirects to negociacoes.html instead of toggling sections
 
             // Função para mostrar/ocultar campos dinâmicos
             const toggleDynamicFields = () => {
@@ -572,28 +560,49 @@
                         if (loggedInButtons) {
                             loggedInButtons.classList.add('hidden');
                         }
+                        // Se não estiver logado, redireciona para o login
+                        window.location.href = 'login.html';
                     }
                 } catch (error) {
                     console.error('Erro ao verificar status de login:', error);
+                    window.location.href = 'login.html';
                 }
             };
 
             // Função para atualizar o contador de notificações no botão
             const updateNotificationsCount = (count) => {
+                const badge = document.getElementById('notificationBadge');
                 if (count > 0) {
-                    notificationsCount.textContent = count;
-                    notificationsCount.classList.remove('hidden');
+                    badge.classList.remove('hidden');
+                    badge.textContent = count;
                 } else {
-                    notificationsCount.classList.add('hidden');
+                    badge.classList.add('hidden');
                 }
             };
 
-            // Event listener para o botão de notificações
-            notificationsButton.addEventListener('click', () => {
-                // Aqui você pode implementar a lógica para mostrar notificações
-                // Por exemplo, abrir um modal com as notificações
-                alert('Funcionalidade de notificações será implementada em breve!');
-            });
+            // Função para atualizar notificações
+            const atualizarNotificacoes = async () => {
+                try {
+                    const response = await fetch('/notificacoes/contagem');
+                    if (response.ok) {
+                        const data = await response.json();
+                        updateNotificationsCount(data.contagem);
+                    }
+                } catch (error) {
+                    console.error('Erro ao atualizar notificações:', error);
+                }
+            };
+
+            // Configurar botão de notificações
+            const configurarBotaoNotificacoes = () => {
+                const negotiationsButton = document.getElementById('negotiationsButton');
+                if (negotiationsButton) {
+                    negotiationsButton.addEventListener('click', () => {
+                        window.location.href = 'negociacoes.html';
+                    });
+                }
+            };
+
 
             // Lógica de logout
             logoutButton.addEventListener('click', async () => {
@@ -609,6 +618,11 @@
             loadUserInfo();
             renderUserItems();
             checkLoginStatus();
+            configurarBotaoNotificacoes();
+            
+            // Atualizar notificações inicialmente e a cada 30 segundos
+            atualizarNotificacoes();
+            setInterval(atualizarNotificacoes, 30000);
         });
     </script>
 </body>

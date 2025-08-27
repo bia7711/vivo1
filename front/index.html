@@ -71,6 +71,11 @@
             </div>
             
             <div id="loggedInButtons" class="hidden items-center space-x-4">
+                <button id="negotiationsButton" class="relative bg-green-500 text-white rounded-full p-3 shadow-lg hover:bg-green-600 transition-colors" aria-label="Negociações">
+                    <i class="fas fa-bell" aria-label="Notificações"></i>
+                    <span id="notificationBadge" class="absolute -top-2 -right-2 bg-red-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center hidden">0</span>
+                </button>
+
                 <a href="perfil.html" class="text-secondary hover:text-primary transition-colors" aria-label="Perfil">
                     <i class="fas fa-user-circle text-4xl"></i>
                 </a>
@@ -84,8 +89,9 @@
     <nav id="menuList">
         <ul class="flex flex-col space-y-2 p-4">
             <li><a href="index.html" class="text-secondary hover:text-accent-color font-semibold transition-colors w-full text-left">Home</a></li>
+            <li><a href="perfil.html" class="text-secondary hover:text-accent-color font-semibold transition-colors w-full text-left">Perfil</a></li>
             <li><a href="loja.html" class="text-secondary hover:text-accent-color font-semibold transition-colors w-full text-left">Loja</a></li>
-            <li><a href="index.html#sobre" class="text-secondary hover:text-accent-color font-semibold transition-colors w-full text-left">Sobre Nós</a></li>           
+            <li><a href="index.html#sobre" class="text-secondary hover:text-accent-color font-semibold transition-colors w-full text-left">Sobre Nós</a></li>
         </ul>
     </nav>
     
@@ -194,7 +200,42 @@
                 }
             });
 
+            // Função para atualizar notificações
+            const atualizarNotificacoes = async () => {
+                try {
+                    const response = await fetch('/notificacoes/contagem');
+                    if (response.ok) {
+                        const data = await response.json();
+                        const badge = document.getElementById('notificationBadge');
+                        
+                        if (data.contagem > 0) {
+                            badge.classList.remove('hidden');
+                            badge.textContent = data.contagem;
+                        } else {
+                            badge.classList.add('hidden');
+                        }
+                    }
+                } catch (error) {
+                    console.error('Erro ao atualizar notificações:', error);
+                }
+            };
+
+            // Configurar botão de notificações
+            const configurarBotaoNotificacoes = () => {
+                const negotiationsButton = document.getElementById('negotiationsButton');
+                if (negotiationsButton) {
+                    negotiationsButton.addEventListener('click', () => {
+                        window.location.href = 'negociacoes.html';
+                    });
+                }
+            };
+
             checkLoginStatus();
+            configurarBotaoNotificacoes();
+            
+            // Atualizar notificações inicialmente e a cada 30 segundos
+            atualizarNotificacoes();
+            setInterval(atualizarNotificacoes, 30000);
         });
     </script>
 </body>
