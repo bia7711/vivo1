@@ -4,8 +4,17 @@ const bodyParser = require('body-parser');
 const session = require('express-session');
 const multer = require('multer');
 const fs = require('fs');
+const { OpenAI } = require('openai');
 const app = express();
 const port = 3000;
+
+// Carregar variáveis de ambiente com caminho completo
+require('dotenv').config({ path: path.join(__dirname, '.env') });
+
+// Configuração da OpenAI - usando chave do .env
+const openai = new OpenAI({
+  apiKey: process.env.OPENAI_API_KEY
+});
 
 // Middleware para análise de corpo de requisições
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -583,6 +592,65 @@ app.get('/notificacoes/contagem', verificarAutenticacao, (req, res) => {
     ).length;
 
     res.json({ contagem });
+});
+
+// Rota para chat com OpenAI com fallback
+app.post('/api/chat', async (req, res) => {
+    try {
+        const { message } = req.body;
+        
+        if (!message) {
+            return res.status(400).json({ error: 'Mensagem é obrigatória' });
+        }
+
+        // Verificar se é uma pergunta de FAQ
+        const faqResponses = {
+            'como funciona': 'A ReUse Jovem é uma plataforma onde você pode trocar ou vender roupas usadas. Você pode cadastrar suas peças, negociar com outros usuários e encontrar peças incríveis!',
+            'como cadastrar': 'Para cadastrar uma peça, faça login e clique em "Cadastrar Peça". Você precisará informar título, descrição, categoria, tipo (troca ou venda) e enviar uma foto.',
+            'como negociar': 'Encontre uma peça que goste e clique em "Negociar". Você pode oferecer uma de suas peças em troca ou, se for venda, comprar diretamente.',
+            'como trocar': 'Na página de uma peça, clique em "Propor Troca" e selecione uma das suas peças para oferecer em troca. O dono da peça receberá uma notificação.',
+            'quanto custa': 'O uso da plataforma é gratuito! Você só paga se comprar uma peça que esteja à venda, através de negociação direta com o vendedor.',
+            'é seguro': 'Sim! Todas as negociações são monitoradas e temos um sistema de avaliação de usuários. Sempre recomendamos encontros em locais públicos para as trocas.'
+        };
+
+        const lowerMessage = message.toLowerCase();
+        for (const [keyword, response] of Object.entries(faqResponses)) {
+            if (lowerMessage.includes(keyword)) {
+                return res.json({ response });
+            }
+        }
+
+        // Se não for FAQ, tentar OpenAI
+        try {
+            const completion = await openai.chat.completions.create({
+                model: "gpt-3.5-turbo",
+                messages: [
+                    { role: "system", content: "Você é um assistente útil da ReUse Jovem, uma plataforma de moda sustentável e troca de roupas. Seja amigável, profissional e incentive o consumo consciente. Responda de forma concisa em português." },
+                    { role: "user", content: message }
+                ],
+                max_tokens: 100,
+                temperature: 0.7
+            });
+
+            const response = completion.choices[0].message.content;
+            res.json({ response });
+            
+        } catch (openaiError) {
+            console.error('Erro ao chamar OpenAI, usando fallback:', openaiError);
+            // Fallback para quando OpenAI não está disponível
+            const fallbackResponses = [
+                "Desculpe, no momento não consigo acessar recursos avançados. Você pode me perguntar sobre como funciona a plataforma, como cadastrar peças ou como negociar!",
+                "Estou com limitações técnicas no momento. Que tal explorar nossas funcionalidades de troca e venda de roupas?",
+                "No momento só consigo responder perguntas sobre o funcionamento da plataforma. Me pergunte sobre cadastro, negociação ou trocas!"
+            ];
+            const randomResponse = fallbackResponses[Math.floor(Math.random() * fallbackResponses.length)];
+            res.json({ response: randomResponse });
+        }
+        
+    } catch (error) {
+        console.error('Erro geral no chat:', error);
+        res.status(500).json({ error: 'Erro interno do servidor' });
+    }
 });
 
 app.listen(port, () => {
