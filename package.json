@@ -1,16 +1,19 @@
 {
   "name": "vivo1",
   "version": "1.0.0",
-  "description": "",
+  "description": "ReUse Jovem - Plataforma de troca de roupas",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "dev": "cd back && npm run start",
+    "build": "echo 'Build completed'",
+    "start": "cd back && npm start",
+    "vercel-build": "echo 'Vercel build completed'"
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/bia7711/vivo1.git"
   },
-  "keywords": [],
+  "keywords": ["ecommerce", "moda", "sustentabilidade"],
   "author": "",
   "license": "ISC",
   "bugs": {

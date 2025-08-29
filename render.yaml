@@ -1,0 +1,10 @@
+services:
+  - type: web
+    name: reuse-jovem-backend
+    env: node
+    buildCommand: cd back && npm install
+    startCommand: cd back && npm start
+    envVars:
+      - key: NODE_ENV
+        value: production
+    plan: free

@@ -1,0 +1,24 @@
+{
+  "version": 2,
+  "builds": [
+    {
+      "src": "front/**/*",
+      "use": "@vercel/static"
+    },
+    {
+      "src": "image/**/*",
+      "use": "@vercel/static"
+    }
+  ],
+  "routes": [
+    {
+      "src": "/(.*)",
+      "dest": "/front/$1"
+    },
+    {
+      "src": "/image/(.*)",
+      "dest": "/image/$1"
+    }
+  ],
+  "outputDirectory": "front"
+}
