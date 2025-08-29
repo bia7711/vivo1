@@ -7,8 +7,10 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
     <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="chatbot-package/chatbot.css">
     <link rel="icon" type="image/png" href="../image/logo.png">
     <script src="theme.js" defer></script>
+    <script src="chatbot-package/chatbot.js" defer></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap');
         body {
@@ -113,6 +115,34 @@
         <p id="loadingMessage" class="text-center text-secondary mt-10">Carregando peças...</p>
     </main>
 
+    <!-- Chatbot Container -->
+    <div class="chatbot-container">
+        <button id="chatbotToggle" class="chatbot-button" aria-label="Abrir chatbot" title="Abrir chatbot">
+            <i class="fas fa-comments" aria-hidden="true"></i> 
+            <span class="chatbot-text">Abrir Chatbot</span>
+            <span class="sr-only">Abrir Chatbot</span>
+        </button>
+        <div id="chatWindow" class="chat-window">
+            <div class="chat-header">
+                <h3>Fale com o ReUseBot</h3>
+                <button class="close-button" id="closeChat" aria-label="Fechar chatbot">×</button>
+            </div>
+            <div id="chatMessages" class="chat-messages"></div>
+            <div class="chat-input">
+                <input type="text" id="userInput" placeholder="Digite sua mensagem..." />
+                <button id="sendMessage">Enviar</button>
+            </div>
+            <div id="quickReplies" class="quick-replies">
+                <button class="quick-reply" data-question="Como funciona?">Como funciona?</button>
+                <button class="quick-reply" data-question="Ajuda">Ajuda</button>
+                <button class="quick-reply" data-question="Contato">Contato</button>
+                <button class="quick-reply" data-question="Customizar peça">Customizar peça</button>
+                <button class="quick-reply" data-question="Combinar looks">Combinar looks</button>
+            </div>
+        </div>
+    </div>
+
     <script src="script.js"></script>
+    <script src="chatbot-package/chatbot.js"></script>
 </body>
 </html>

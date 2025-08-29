@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quick Replies Customizados</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+    <style>
+        .chat-container {
+            max-width: 800px;
+            margin: 20px auto;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        
+        .chat-header {
+            background-color: #22c55e;
+            color: white;
+            padding: 16px;
+            text-align: center;
+            font-weight: bold;
+        }
+        
+        .chat-messages {
+            height: 400px;
+            overflow-y: auto;
+            padding: 16px;
+            background-color: #f8fafc;
+        }
+        
+        .message {
+            margin-bottom: 12px;
+            padding: 10px 15px;
+            border-radius: 18px;
+            max-width: 80%;
+        }
+        
+        .bot-message {
+            background-color: #e0e7ff;
+            align-self: flex-start;
+            border-bottom-left-radius: 0;
+        }
+        
+        .user-message {
+            background-color: #22c55e;
+            color: white;
+            align-self: flex-end;
+            border-bottom-right-radius: 0;
+            margin-left: auto;
+        }
+        
+        .quick-replies-container {
+            padding: 16px;
+            background-color: #f1f5f9;
+            border-top: 1px solid #e2e8f0;
+        }
+        
+        .quick-reply {
+            padding: 8px 16px;
+            margin: 4px;
+            border-radius: 20px;
+            border: none;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        
+        .customize-btn {
+            background-color: #3b82f6;
+            color: white;
+        }
+        
+        .usage-btn {
+            background-color: #8b5cf6;
+            color: white;
+        }
+        
+        .chat-input-container {
+            display: flex;
+            padding: 16px;
+            background-color: white;
+            border-top: 1px solid #e2e8f0;
+        }
+        
+        .chat-input {
+            flex: 1;
+            padding: 12px;
+            border: 1px solid #cbd5e1;
+            border-radius: 20px;
+            margin-right: 10px;
+        }
+        
+        .send-button {
+            background-color: #22c55e;
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body class="bg-gray-100">
+    <div class="chat-container">
+        <div class="chat-header">
+            Assistente Virtual
+        </div>
+        
+        <div class="chat-messages" id="chatMessages">
+            <div class="message bot-message">
+                Olá! 👋 Como posso ajudar você hoje?
+            </div>
+        </div>
+        
+        <div class="quick-replies-container">
+            <div class="flex flex-wrap justify-center">
+                <button class="quick-reply customize-btn" onclick="startCustomization()">
+                    <i class="fas fa-paint-brush mr-2"></i> Customizar peça
+                </button>
+                <button class="quick-reply usage-btn" onclick="startUsageTips()">
+                    <i class="fas fa-lightbulb mr-2"></i> Saber como usar peça
+                </button>
+            </div>
+        </div>
+        
+        <div class="chat-input-container">
+            <input type="text" class="chat-input" id="userInput" placeholder="Digite sua mensagem...">
+            <button class="send-button" onclick="sendMessage()">
+                <i class="fas fa-paper-plane"></i>
+            </button>
+        </div>
+    </div>
+
+    <script>
+        // JSON com peças e cores
+        const fashionData = {
+            pieces: [
+                "camiseta", "calça", "jaqueta", "vestido", 
+                "saia", "tênis", "sapato", "blusa", 
+                "shorts", "casaco", "meia", "boné"
+            ],
+            colors: [
+                "vermelho", "azul", "verde", "amarelo", 
+                "preto", "branco", "rosa", "roxo", 
+                "laranja", "cinza", "marrom", "bege"
+            ]
+        };
+
+        // Estado do chat
+        let chatState = {
+            currentFlow: null, // 'customization' ou 'usage'
+            piece: null,
+            color: null
+        };
+
+        // Função para adicionar mensagem ao chat
+        function addMessage(text, isUser = false) {
+            const chatMessages = document.getElementById('chatMessages');
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `message ${isUser ? 'user-message' : 'bot-message'}`;
+            messageDiv.textContent = text;
+            chatMessages.appendChild(messageDiv);
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        }
+
+        // Função para iniciar o fluxo de customização
+        function startCustomization() {
+            chatState.currentFlow = 'customization';
+            chatState.piece = null;
+            chatState.color = null;
+            
+            addMessage("Você escolheu customizar uma peça! 🎨");
+            addMessage("Qual peça você gostaria de customizar?");
+            
+            // Mostrar opções de peças
+            showPieceOptions();
+        }
+
+        // Função para iniciar o fluxo de dicas de uso
+        function startUsageTips() {
+            chatState.currentFlow = 'usage';
+            chatState.piece = null;
+            chatState.color = null;
+            
+            addMessage("Você escolheu saber como usar uma peça! 💡");
+            addMessage("Qual peça você gostaria de receber dicas?");
+            
+            // Mostrar opções de peças
+            showPieceOptions();
+        }
+
+        // Função para mostrar opções de peças
+        function showPieceOptions() {
+            const pieces = fashionData.pieces;
+            let message = "Opções disponíveis:\n";
+            pieces.forEach((piece, index) => {
+                message += `${index + 1}. ${piece}\n`;
+            });
+            message += "\nDigite o número da peça ou o nome da peça:";
+            addMessage(message);
+        }
+
+        // Função para mostrar opções de cores
+        function showColorOptions() {
+            const colors = fashionData.colors;
+            let message = "Agora escolha a cor:\n";
+            colors.forEach((color, index) => {
+                message += `${index + 1}. ${color}\n`;
+            });
+            message += "\nDigite o número da cor ou o nome da cor:";
+            addMessage(message);
+        }
+
+        // Função para processar a entrada do usuário
+        function processUserInput(input) {
+            // Converter input para minúsculas para facilitar a comparação
+            const inputLower = input.toLowerCase().trim();
+            
+            // Verificar se o input é um número válido
+            const inputNumber = parseInt(input);
+            
+            if (chatState.currentFlow === 'customization') {
+                if (!chatState.piece) {
+                    // Usuário está escolhendo a peça
+                    let selectedPiece = null;
+                    
+                    if (!isNaN(inputNumber) && inputNumber > 0 && inputNumber <= fashionData.pieces.length) {
+                        selectedPiece = fashionData.pieces[inputNumber - 1];
+                    } else {
+                        // Verificar se o input corresponde a algum nome de peça
+                        selectedPiece = fashionData.pieces.find(piece => piece.toLowerCase() === inputLower);
+                    }
+                    
+                    if (selectedPiece) {
+                        chatState.piece = selectedPiece;
+                        addMessage(`Você escolheu: ${selectedPiece}`, true);
+                        showColorOptions();
+                    } else {
+                        addMessage("Peça não encontrada. Por favor, escolha uma peça válida.");
+                        showPieceOptions();
+                    }
+                } else if (!chatState.color) {
+                    // Usuário está escolhendo a cor
+                    let selectedColor = null;
+                    
+                    if (!isNaN(inputNumber) && inputNumber > 0 && inputNumber <= fashionData.colors.length) {
+                        selectedColor = fashionData.colors[inputNumber - 1];
+                    } else {
+                        // Verificar se o input corresponde a algum nome de cor
+                        selectedColor = fashionData.colors.find(color => color.toLowerCase() === inputLower);
+                    }
+                    
+                    if (selectedColor) {
+                        chatState.color = selectedColor;
+                        addMessage(`Você escolheu: ${selectedColor}`, true);
+                        provideCustomizationTips();
+                    } else {
+                        addMessage("Cor não encontrada. Por favor, escolha uma cor válida.");

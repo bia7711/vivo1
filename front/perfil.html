@@ -160,24 +160,24 @@
 
 
                 <!-- Modal de Adicionar Peça -->
-                <div id="addPieceModal"
-                    class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 hidden"
-                    style="z-index: 50;">
-                    <div class="bg-white p-6 rounded-lg shadow-lg w-96" style="z-index: 60;">
-                        <h2 class="text-xl font-bold mb-4">Adicionar Nova Peça</h2>
+                        <div id="addPieceModal"
+                            class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 hidden"
+                            style="z-index: 50;">
+                            <div class="bg-white :bg-gray-900 p-6 rounded-lg shadow-lg w-96" style="z-index: 60;">
+                                <h2 class="text-xl font-bold mb-4 text-gray-900 dark:text">Adicionar Nova Peça</h2>
                         <form id="addPieceForm">
                             <div class="mb-4">
-                                <label for="titulo" class="block text-sm font-medium text-gray-700">Título</label>
+                                <label for="titulo" class="block text-sm font-medium text-gray-900 dark:text">Título</label>
                                 <input type="text" id="titulo" name="titulo" required
                                     class="mt-1 block w-full border border-gray-300 rounded-md p-2" />
                             </div>
                             <div class="mb-4">
-                                <label for="descricao" class="block text-sm font-medium text-gray-700">Descrição</label>
+                                <label for="descricao" class="block text-sm font-medium text-gray-900 dark:text">Descrição</label>
                                 <textarea id="descricao" name="descricao" required
                                     class="mt-1 block w-full border border-gray-300 rounded-md p-2"></textarea>
                             </div>
                             <div class="mb-4">
-                                <label for="categoria" class="block text-sm font-medium text-gray-700">Categoria</label>
+                                <label for="categoria" class="block text-sm font-medium text-gray-900 dark:text">Categoria</label>
                                 <select id="categoria" name="categoria" required
                                     class="mt-1 block w-full border border-gray-300 rounded-md p-2">
                                     <option value="">Selecione uma categoria</option>
@@ -187,14 +187,14 @@
                                 </select>
                             </div>
                             <div class="mb-4">
-                                <label for="tipo" class="block text-sm font-medium text-gray-700">Tipo</label>
+                                <label for="tipo" class="block text-sm font-medium text-gray-900 dark:text">Tipo</label>
                                 <div class="flex space-x-4">
-                                    <label class="flex items-center">
+                                    <label class="flex items-center text-primary">
                                         <input type="radio" id="venda" name="tipo" value="Venda" required
                                             class="mr-2" />
                                         Venda
                                     </label>
-                                    <label class="flex items-center">
+                                    <label class="flex items-center text-primary">
                                         <input type="radio" id="troca" name="tipo" value="Troca" required
                                             class="mr-2" />
                                         Troca
@@ -202,18 +202,18 @@
                                 </div>
                             </div>
                             <div class="mb-4" id="precoContainer" style="display: none;">
-                                <label for="preco" class="block text-sm font-medium text-gray-700">Preço</label>
+                                <label for="preco" class="block text-sm font-medium text-gray-900 dark:text">Preço</label>
                                 <input type="number" id="preco" name="preco"
                                     class="mt-1 block w-full border border-gray-300 rounded-md p-2" />
                             </div>
                             <div class="mb-4" id="preferenciaContainer" style="display: none;">
-                                <label for="preferencia" class="block text-sm font-medium text-gray-700">Preferência de
+                                <label for="preferencia" class="block text-sm font-medium text-gray-900 dark:text">Preferência de
                                     Troca</label>
                                 <input type="text" id="preferencia" name="preferencia"
                                     class="mt-1 block w-full border border-gray-300 rounded-md p-2" />
                             </div>
                             <div class="mb-4">
-                                <label for="imagem" class="block text-sm font-medium text-gray-700">Imagem</label>
+                                <label for="imagem" class="block text-sm font-medium text-gray-900 dark:text">Imagem</label>
                                 <input type="file" id="imagem" name="imagem" accept="image/*" required
                                     class="mt-1 block w-full border border-gray-300 rounded-md p-2" />
                             </div>
@@ -250,6 +250,8 @@
             </div>
         </section>
     </main>
+
+
     <script>
         document.addEventListener('DOMContentLoaded', () => {
             const menuToggle = document.getElementById('menuToggle');

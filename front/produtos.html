@@ -262,7 +262,8 @@
 
       } catch (error) {
         console.error('Erro ao verificar peças:', error);
-        alert('Erro ao carregar suas peças. Tente novamente.');
+        alert('Não é possível realizar trocas ou compra sem uma conta. Crie uma agora ou, se já tiver, basta realizar login.');
+        window.location.href = "./login.html";
       }
     };
 
